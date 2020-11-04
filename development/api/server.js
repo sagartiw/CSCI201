@@ -5,6 +5,8 @@ const {MongoClient} = require('mongodb');
 var cors = require('cors');
 const app = express();
 
+
+//CAROL COMMENTING
 const password = 'Carol1234';
 const uri = `mongodb+srv://carol:${password}@cluster0.zyzjm.mongodb.net/?retryWrites=true&w=majority`;
 const mongo = new MongoClient(uri);
