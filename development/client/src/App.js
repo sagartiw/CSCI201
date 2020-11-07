@@ -1,12 +1,18 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import {Home} from './components/Home';
+import {AddEvent} from './components/AddEvent';
+import {EditEvent} from './components/EditEvent';
+
 
 function App() {
   return (
       <div className="App">
         <h1>APP</h1>
-
+        <Home/>
+        <AddEvent/>
+        <EditEvent/>
       </div>
     /*<div className="App">
       <header className="App-header">
