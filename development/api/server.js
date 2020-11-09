@@ -36,6 +36,39 @@ mongo.connect(function (err) {
            })
     });
 
+    // Gets all the events, modeled after Carol's example
+    app.get('/allEvents', (request, response) => {
+       db.collection('Events').find({})
+           .toArray()
+           .then((result) => {
+               response.status(200).json(result)
+           })
+           .catch((error) => {
+               response.status(400).send(error.message);
+           })
+    });
+
+    // Search for an event by a SINGLE keyword
+    // ISSUE: Doesn't work. Doesn't return any results ever
+    // TODO: Lookup by multiple keywords
+    app.get('/lookupEventsByKeyword', (request, response) => {
+        db.collection('Events').find({
+            keywords: request.params.keywords // finds all documents that have 1 of these keywords or more
+        })
+            .toArray()
+            .then((result) => {
+                response.status(200).json(result)
+            })
+            .catch((error) => {
+                response.status(400).send(error.message);
+            })
+        }
+    )
+
+    // Add an event
+    // app.post('/addEvent', async (request, response) => {
+    //  // er uh gonna have to spend more time on this one
+    // })
 });
 
 app.get('/', function (req, res) {
