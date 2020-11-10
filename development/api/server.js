@@ -50,10 +50,12 @@ mongo.connect(function (err) {
 
     // Search for an event by a SINGLE keyword
     // ISSUE: Doesn't work. Doesn't return any results ever
+    // The problem is that, apparently, request.params is always blank
     // TODO: Lookup by multiple keywords
     app.get('/lookupEventsByKeyword', (request, response) => {
+        console.log(request.params);
         db.collection('Events').find({
-            keywords: request.params.keywords // finds all documents that have 1 of these keywords or more
+            keywords: { $all : ['Rocket', 'Lab'] }  // usually, it would be $all : request.params.keywords
         })
             .toArray()
             .then((result) => {
@@ -65,10 +67,34 @@ mongo.connect(function (err) {
         }
     )
 
-    // Add an event
-    // app.post('/addEvent', async (request, response) => {
-    //  // er uh gonna have to spend more time on this one
-    // })
+    app.get('/lookupOrgsByKeyword', (request, response) => {
+        console.log(request.params);
+        db.collection('Organizations').find({
+            keywords: { $all: request.params.keywords } //this never returns anything. request.params is always blank
+        })
+            .toArray()
+            .then((result) => {
+                response.status(200).json(result)
+            })
+            .catch((error) => {
+                response.status(400).send(error.message);
+            })
+        }
+    )
+
+    app.get('/lookupOrgsBySchool', (request, response) => {
+            db.collection('Organizations').find({
+                school: 'Viterbi' // putting request.params.school here doesn't seem to route my Postman request to this query
+            })
+                .toArray()
+                .then((result) => {
+                    response.status(200).json(result)
+                })
+                .catch((error) => {
+                    response.status(400).send(error.message);
+                })
+        }
+    )
 });
 
 app.get('/', function (req, res) {
