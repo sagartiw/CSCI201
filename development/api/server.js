@@ -51,11 +51,12 @@ mongo.connect(function (err) {
     // Search for an event by a SINGLE keyword
     // ISSUE: Doesn't work. Doesn't return any results ever
     // The problem is that, apparently, request.params is always blank
+    // UPDATE: Carol fixed the keywords endpoint - use request.query rather than request.params since we're not using router
     // TODO: Lookup by multiple keywords
-    app.get('/lookupEventsByKeyword', (request, response) => {
-        console.log(request.params);
+    app.get('/:keywords', (request, response) => {
+        console.log("request params: " +  request.query.keywords);
         db.collection('Events').find({
-            keywords: { $all : ['Rocket', 'Lab'] }  // usually, it would be $all : request.params.keywords
+            keywords: { $all : [request.query.keywords] }  // usually, it would be $all : request.params.keywords
         })
             .toArray()
             .then((result) => {
