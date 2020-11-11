@@ -53,10 +53,10 @@ mongo.connect(function (err) {
     // The problem is that, apparently, request.params is always blank
     // UPDATE: Carol fixed the keywords endpoint - use request.query rather than request.params since we're not using router
     // TODO: Lookup by multiple keywords
-    app.get('/:keywords', (request, response) => {
+    app.get('/lookupEventsByKeyword', (request, response) => {
         console.log("request params: " +  request.query.keywords);
         db.collection('Events').find({
-            keywords: { $all : [request.query.keywords] }  // usually, it would be $all : request.params.keywords
+            keywords: { $all : [request.query.keywords] }  // usually, it would be $all : request.query.keywords
         })
             .toArray()
             .then((result) => {
@@ -69,9 +69,9 @@ mongo.connect(function (err) {
     )
 
     app.get('/lookupOrgsByKeyword', (request, response) => {
-        console.log(request.params);
+        console.log(request.query.keywords);
         db.collection('Organizations').find({
-            keywords: { $all: request.params.keywords } //this never returns anything. request.params is always blank
+            keywords: { $all: [request.query.keywords] } //this never returns anything. request.params is always blank
         })
             .toArray()
             .then((result) => {
