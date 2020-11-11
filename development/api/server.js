@@ -56,8 +56,8 @@ mongo.connect(function (err) {
     app.get('/lookupEventsByKeyword', (request, response) => {
         console.log("request params: " +  request.query.keywords);
         db.collection('Events').find({
-            keywords: { $all : [request.query.keywords] }  // usually, it would be $all : request.query.keywords
-        })
+            keywords: { $all : [request.query.keywords] }  // doesn't seem to work if multiple keywords are requested
+        })                                  // to make an array in postman: keywords[0] = 'Rocket', keywords[1] = 'Lab', etc.
             .toArray()
             .then((result) => {
                 response.status(200).json(result)
@@ -68,34 +68,45 @@ mongo.connect(function (err) {
         }
     )
 
-    app.get('/lookupOrgsByKeyword', (request, response) => {
-        console.log(request.query.keywords);
-        db.collection('Organizations').find({
-            keywords: { $all: [request.query.keywords] } //this never returns anything. request.params is always blank
-        })
-            .toArray()
-            .then((result) => {
-                response.status(200).json(result)
-            })
-            .catch((error) => {
-                response.status(400).send(error.message);
+    // inserts a new org
+    // TODO: only add org if that org does not already exist
+    app.post('/addOrg', async (request, response) => {
+            let newOrg =
+                {
+                    name: request.query.name,
+                    users: [],
+                    events: [],
+                    description: request.query.description,
+                    school: request.query.school,
+                    keywords: request.query.keywords,
+                    created: new Date(Date.now()).toISOString()
+                };
+            await db.collection('Organizations').insertOne(newOrg, (err, result) => {
+                if (err) {
+                    //console.log('Failed to add org: ' + err);
+                    response.status(400).json('Failed to add org');
+                } else {
+                    //console.log('org added successfully!');
+                    response.status(200).json('Successfully added org!');
+                }
             })
         }
     )
 
-    app.get('/lookupOrgsBySchool', (request, response) => {
-            db.collection('Organizations').find({
-                school: 'Viterbi' // putting request.params.school here doesn't seem to route my Postman request to this query
-            })
-                .toArray()
-                .then((result) => {
-                    response.status(200).json(result)
-                })
-                .catch((error) => {
-                    response.status(400).send(error.message);
-                })
-        }
-    )
+    // deletes an org by name
+    app.post('/deleteOrg', async (request, response) => {
+        const name = request.query.name;
+        await db.collection('Organizations').deleteOne({ name: name }, (err, result) => {
+            if (err) {
+                //console.log('Failed to delete org: ' + err);
+                response.status(400).json('Failed to delete org');
+            }
+            else {
+                //console.log('org deleted successfully!');
+                response.status(200).json('Successfully deleted org!');
+            }
+        })
+    })
 });
 
 app.get('/', function (req, res) {
