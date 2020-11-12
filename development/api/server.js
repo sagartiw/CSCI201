@@ -65,12 +65,25 @@ mongo.connect(function (err) {
             .catch((error) => {
                 response.status(400).send(error.message);
             })
-        }
-    )
+    });
 
-    // inserts a new org
-    // TODO: only add org if that org does not already exist
+    // inserts a new org, only if it doesn't yet exist
     app.post('/addOrg', async (request, response) => {
+        let exists = false;
+        await db.collection('Organizations').find({
+            name : request.query.name
+        }).toArray()
+            .then((result) => {
+                // if there's a club with that name already, don't add again
+                if (result.length > 0) {
+                    response.status(400).json("Org already exists!")
+                    exists = true;
+                    console.log('Org exists');
+                }
+            })
+
+        if (!exists) { // only if the org doesn't yet exist, add it. (if it already exists, skip adding it)
+            console.log('Adding org');
             let newOrg =
                 {
                     name: request.query.name,
@@ -81,6 +94,7 @@ mongo.connect(function (err) {
                     keywords: request.query.keywords,
                     created: new Date(Date.now()).toISOString()
                 };
+
             await db.collection('Organizations').insertOne(newOrg, (err, result) => {
                 if (err) {
                     //console.log('Failed to add org: ' + err);
@@ -91,22 +105,37 @@ mongo.connect(function (err) {
                 }
             })
         }
-    )
+    });
 
-    // deletes an org by name
+    // deletes an org by name, only if it exists
     app.post('/deleteOrg', async (request, response) => {
         const name = request.query.name;
-        await db.collection('Organizations').deleteOne({ name: name }, (err, result) => {
-            if (err) {
-                //console.log('Failed to delete org: ' + err);
-                response.status(400).json('Failed to delete org');
-            }
-            else {
-                //console.log('org deleted successfully!');
-                response.status(200).json('Successfully deleted org!');
-            }
-        })
-    })
+        // first look for the name
+        let exists = false;
+        await db.collection('Organizations').find({
+            name : name
+        }).toArray()
+            .then((result) => {
+                // if there's a club with that name already, don't add again
+                if (result.length > 0) {
+                    exists = true;
+                }
+                else
+                    response.status(400).json("Can't delete an org that doesn't exist")
+            })
+
+        if (exists) {
+            await db.collection('Organizations').deleteOne({name: name}, (err, result) => {
+                if (err) {
+                    //console.log('Failed to delete org: ' + err);
+                    response.status(400).json('Failed to delete org');
+                } else {
+                    //console.log('org deleted successfully!');
+                    response.status(200).json('Successfully deleted org!');
+                }
+            })
+        }
+    });
 });
 
 app.get('/', function (req, res) {
