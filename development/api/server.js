@@ -48,6 +48,18 @@ mongo.connect(function (err) {
            })
     });
 
+    // Gets all the organizations, modeled after Carol's example - added by Albert
+    app.get('/allOrgs', (request, response) => {
+        db.collection('Organizations').find({})
+            .toArray()
+            .then((result) => {
+                response.status(200).json(result)
+            })
+            .catch((error) => {
+                response.status(400).send(error.message);
+            })
+    });
+
     // Search for an event by a SINGLE keyword
     // ISSUE: Doesn't work. Doesn't return any results ever
     // The problem is that, apparently, request.params is always blank
@@ -132,6 +144,75 @@ mongo.connect(function (err) {
                 } else {
                     //console.log('org deleted successfully!');
                     response.status(200).json('Successfully deleted org!');
+                }
+            })
+        }
+    });
+
+    // inserts a new user, only if there isn't another user with the same username
+    app.post('/addUser', async (request, response) => {
+        let exists = false;
+        await db.collection('Users').find({
+            username : request.query.username
+        }).toArray()
+            .then((result) => {
+                // if there's a User with that name already, don't add again
+                if (result.length > 0) {
+                    response.status(400).json("Username is taken!")
+                    exists = true;
+                    console.log('Username is taken');
+                }
+            })
+
+        if (!exists) { // only if the User does not exist, add it. (if it already exists, skip adding it)
+            console.log('Adding User');
+            let newUser =
+                {
+                    username: request.query.username,
+                    password: request.query.password,
+                    firstName: request.query.firstName,
+                    lastName: request.query.lastName,
+                    memberOrgs: [],
+                    created: new Date(Date.now()).toISOString()
+                };
+
+            await db.collection('Users').insertOne(newUser, (err, result) => {
+                if (err) {
+                    //console.log('Failed to add org: ' + err);
+                    response.status(400).json('Failed to add User');
+                } else {
+                    //console.log('org added successfully!');
+                    response.status(200).json('Successfully added User!');
+                }
+            })
+        }
+    });
+
+    // deletes a User by username, only if it exists
+    app.post('/deleteUser', async (request, response) => {
+        const username = request.query.username;
+        // first look for the Username
+        let exists = false;
+        await db.collection('Users').find({
+            username : username
+        }).toArray()
+            .then((result) => {
+                // if there's a User with that name already, we can delete
+                if (result.length > 0) {
+                    exists = true;
+                }
+                else
+                    response.status(400).json("Can't delete an User with a username that doesn't exist!")
+            })
+
+        if (exists) {
+            await db.collection('Users').deleteOne({username: username}, (err, result) => {
+                if (err) {
+                    //console.log('Failed to delete User: ' + err);
+                    response.status(400).json('Failed to delete User');
+                } else {
+                    //console.log('org deleted successfully!');
+                    response.status(200).json('Successfully deleted User!');
                 }
             })
         }
