@@ -172,6 +172,49 @@ mongo.connect(function (err) {
         }
     });
 
+    // updates an org's information
+    // to update the keywords in Postman you need to create different key, value pairs for each array entry.
+    // Ex: key: keywords[0], value: Rocket
+    app.post('/editOrg', async (request, response) => {
+        let exists = false;
+        await db.collection('Organizations').find({
+            name : request.query.name
+        }).toArray()
+            .then((result) => {
+                // if there's a club with that name already, don't add again
+                if (result.length > 0) {
+                    //response.status(400).json("Org already exists!")
+                    exists = true;
+                    console.log('Org exists');
+                }
+            })
+
+        if (exists) { // only if the org exists do we attempt to update the information
+            console.log('Editing org');
+            await db.collection('Organizations').updateOne(
+                { name : request.query.name },
+                {
+                    $set: {
+                        description: request.query.description,
+                        school : request.query.school,
+                        keywords :request.query.keywords,
+                    },
+                    $currentDate: {
+                        created: true
+                    }
+                },
+                (err, result) => {
+                    if (err) {
+                        //console.log('Failed to delete org: ' + err);
+                        response.status(400).json('Failed to  lol org');
+                    } else {
+                        //console.log('org deleted successfully!');
+                        response.status(200).json('Successfully edited org!');
+                    }
+                })
+        }
+    });
+
     // Returns a user given the username. If no user exists, returns an empty array.
     app.get('/getUser', (request, response) => {
         console.log("request params: " +  request.query.username);
