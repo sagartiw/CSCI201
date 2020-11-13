@@ -79,8 +79,8 @@ mongo.connect(function (err) {
             })
     });
 
-    // Search up events via keywords using POST request.
-    // Postman: Pass in a JSON object with an array of keywords to raw and change text to JSON
+    // Search up events via keywords using POST request. If no event exists, returns an empty array.
+    // Postman: Pass in a JSON object with an array of keywords to Body -> raw and change text to JSON
     // Ex. {
     //     "keywords": [
     //         "Rocket",
@@ -172,6 +172,21 @@ mongo.connect(function (err) {
                 }
             })
         }
+    });
+
+    // Returns a user given the username. If no user exists, returns an empty array.
+    app.get('/getUser', (request, response) => {
+        console.log("request params: " +  request.query.username);
+        db.collection('Users').find({
+            username: request.query.username
+        })
+            .toArray()
+            .then((result) => {
+                response.status(200).json(result)
+            })
+            .catch((error) => {
+                response.status(400).send(error.message);
+            })
     });
 
     // inserts a new user, only if there isn't another user with the same username
