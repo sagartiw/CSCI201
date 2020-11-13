@@ -1,9 +1,9 @@
 import React from 'react';
 import './App.css';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom'
-import {Home} from './components/Home';
-import {AddEvent} from './components/AddEvent';
-import {EditEvent} from './components/EditEvent';
+import {Home} from './pages/Home';
+import {AddEvent} from './pages/AddEvent';
+import {EditEvent} from './pages/EditEvent';
 
 
 function App() {
