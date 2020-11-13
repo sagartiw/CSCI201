@@ -102,8 +102,6 @@ mongo.connect(function (err) {
             })
     });
 
-
-
     // inserts a new org, only if it doesn't yet exist
     app.post('/addOrg', async (request, response) => {
         let exists = false;
@@ -223,6 +221,45 @@ mongo.connect(function (err) {
                 } else {
                     //console.log('org added successfully!');
                     response.status(200).json('Successfully added User!');
+                }
+            })
+        }
+    });
+
+    // Edits a user, only if there is a user that is found given a username (can update everything but username)
+    app.post('/editUser', async (request, response) => {
+        let exists = false;
+        await db.collection('Users').find({
+            username : request.query.username
+        }).toArray()
+            .then((result) => {
+                // if there's a User with that name already, it is okay to edit
+                if (result.length > 0) {
+                    exists = true;
+                }
+                else if (result.length == 0) {
+                    response.status(400).json("Cannot edit a user that does not exist!")
+                }
+            })
+
+        if (exists) { // only if the User does exist, edit it. (if it doesn't exists, don't edit it)
+            console.log('Editing User');
+
+            await db.collection('Users').updateOne(
+                { username: request.query.username },
+                {
+                    $set: {
+                        password: request.query.password,
+                        firstName: request.query.firstName,
+                        lastName: request.query.lastName
+                    },
+                    $currentDate: { lastModified: true }
+                },
+                (err, result) => {
+                if (err) {
+                    response.status(400).json('Failed to edit User');
+                } else {
+                    response.status(200).json('Successfully edited User!');
                 }
             })
         }
