@@ -48,7 +48,7 @@ mongo.connect(function (err) {
            })
     });
 
-    // Gets all the organizations, modeled after Carol's example - added by Albert
+    // Gets all the organizations, modeled after Carol's example
     app.get('/allOrgs', (request, response) => {
         db.collection('Organizations').find({})
             .toArray()
@@ -78,6 +78,31 @@ mongo.connect(function (err) {
                 response.status(400).send(error.message);
             })
     });
+
+    // Search up events via keywords using POST request.
+    // Postman: Pass in a JSON object with an array of keywords to raw and change text to JSON
+    // Ex. {
+    //     "keywords": [
+    //         "Rocket",
+    //         "Lab"
+    //     ]
+    // }
+    app.post('/lookupEventsByKeyword2', async (request, response) => {
+        console.log("request params: " +  request.query.keywords);
+        const keywords = request.body.keywords;
+        db.collection('Events').find({
+            keywords: { $all : keywords }
+        })
+            .toArray()
+            .then((result) => {
+                response.status(200).json(result)
+            })
+            .catch((error) => {
+                response.status(400).send(error.message);
+            })
+    });
+
+
 
     // inserts a new org, only if it doesn't yet exist
     app.post('/addOrg', async (request, response) => {
