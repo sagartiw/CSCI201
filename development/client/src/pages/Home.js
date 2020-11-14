@@ -1,9 +1,12 @@
-import React from 'react'
+import React from 'react';
+import {NavbarPanel} from '../components/Navbar';
 
 export const Home = () => {
     return(
         <div>
-            <h1>Home Page</h1>
+            <NavbarPanel/>
+            <h1>HI THERE</h1>
         </div>
-    )
+    );
+
 }
