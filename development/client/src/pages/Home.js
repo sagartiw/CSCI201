@@ -8,8 +8,6 @@ export const Home = () => {
         <div>
             <NavbarPanel/>
             <EventsPanel/>
-
-            <Link to="/AddEvent" className="btn btn-outline-primary ml-2">Add Event</Link>
         </div>
     );
 
