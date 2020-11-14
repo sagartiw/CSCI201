@@ -60,25 +60,6 @@ mongo.connect(function (err) {
             })
     });
 
-    // Search for an event by a SINGLE keyword
-    // ISSUE: Doesn't work. Doesn't return any results ever
-    // The problem is that, apparently, request.params is always blank
-    // UPDATE: Carol fixed the keywords endpoint - use request.query rather than request.params since we're not using router
-    // TODO: Lookup by multiple keywords
-    app.get('/lookupEventsByKeyword', (request, response) => {
-        console.log("request params: " +  request.query.keywords);
-        db.collection('Events').find({
-            keywords: { $all : [request.query.keywords] }  // doesn't seem to work if multiple keywords are requested
-        })                                  // to make an array in postman: keywords[0] = 'Rocket', keywords[1] = 'Lab', etc.
-            .toArray()
-            .then((result) => {
-                response.status(200).json(result)
-            })
-            .catch((error) => {
-                response.status(400).send(error.message);
-            })
-    });
-
     // Search up events via keywords using POST request. If no event exists, returns an empty array.
     // Postman: Pass in a JSON object with an array of keywords to Body -> raw and change text to JSON
     // Ex. {
@@ -87,8 +68,8 @@ mongo.connect(function (err) {
     //         "Lab"
     //     ]
     // }
-    app.post('/lookupEventsByKeyword2', async (request, response) => {
-        console.log("request params: " +  request.query.keywords);
+    app.post('/lookupEventsByKeywords', async (request, response) => {
+        console.log("request params: " +  request.body.keywords);
         const keywords = request.body.keywords;
         db.collection('Events').find({
             keywords: { $all : keywords }
@@ -151,7 +132,7 @@ mongo.connect(function (err) {
             name : name
         }).toArray()
             .then((result) => {
-                // if there's a club with that name already, don't add again
+                // if there's a club with that name already, then we can delete
                 if (result.length > 0) {
                     exists = true;
                 }
@@ -169,6 +150,49 @@ mongo.connect(function (err) {
                     response.status(200).json('Successfully deleted org!');
                 }
             })
+        }
+    });
+
+    // updates an org's information
+    // to update the keywords in Postman you need to create different key, value pairs for each array entry.
+    // Ex: key: keywords[0], value: Rocket
+    app.post('/editOrg', async (request, response) => {
+        let exists = false;
+        await db.collection('Organizations').find({
+            name : request.query.name
+        }).toArray()
+            .then((result) => {
+                // if there's a club with that name already, don't add again
+                if (result.length > 0) {
+                    //response.status(400).json("Org already exists!")
+                    exists = true;
+                    console.log('Org exists');
+                }
+            })
+
+        if (exists) { // only if the org exists do we attempt to update the information
+            console.log('Editing org');
+            await db.collection('Organizations').updateOne(
+                { name : request.query.name },
+                {
+                    $set: {
+                        description: request.query.description,
+                        school : request.query.school,
+                        keywords :request.query.keywords,
+                    },
+                    $currentDate: {
+                        created: true
+                    }
+                },
+                (err, result) => {
+                    if (err) {
+                        //console.log('Failed to delete org: ' + err);
+                        response.status(400).json('Failed to  lol org');
+                    } else {
+                        //console.log('org deleted successfully!');
+                        response.status(200).json('Successfully edited org!');
+                    }
+                })
         }
     });
 
