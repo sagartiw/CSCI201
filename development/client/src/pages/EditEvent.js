@@ -21,7 +21,7 @@ export const EditEvent = (props) => {
 
     useEffect(() => {
         const eventId = currentEventId;
-        const selectedEvent = events.find(event => event.id === eventId)
+        const selectedEvent = events.find(event => event.id === Number(eventId))
         setSelectedEvent(selectedEvent)
     }, [currentEventId, events])
 
