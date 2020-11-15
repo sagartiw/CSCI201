@@ -60,6 +60,10 @@ mongo.connect(function (err) {
             })
     });
 
+    // -----------------------------------------------------------------------
+    // ---------------------------- Event Queries ----------------------------
+    // -----------------------------------------------------------------------
+
     // Search up events via keywords using POST request. If no event exists, returns an empty array.
     // Postman: Pass in a JSON object with an array of keywords to Body -> raw and change text to JSON
     // Ex. {
@@ -82,6 +86,128 @@ mongo.connect(function (err) {
                 response.status(400).send(error.message);
             })
     });
+
+    // Add event
+    app.post('/addEvent', async (request, response) => {
+        let exists = false;
+        await db.collection('Events').find({
+            title : request.query.title
+        }).toArray()
+            .then((result) => {
+                // if there's a club with that name already, don't add again
+                if (result.length > 0) {
+                    response.status(400).json("Event already exists!")
+                    exists = true;
+                    console.log('Event exists');
+                }
+            })
+
+        if (!exists) { // only if the org doesn't yet exist, add it. (if it already exists, skip adding it)
+            console.log('Adding event');
+            let newOrg =
+                {
+                    organization: request.query.organization,
+                    time: request.query.time,
+                    title: request.query.title,
+                    keywords: request.query.keywords,
+                    description: request.query.description,
+                    created: new Date(Date.now()).toISOString()
+                };
+
+            await db.collection('Events').insertOne(newOrg, (err, result) => {
+                if (err) {
+                    //console.log('Failed to add org: ' + err);
+                    response.status(400).json('Failed to add event');
+                } else {
+                    //console.log('org added successfully!');
+                    response.status(200).json('Successfully added event!');
+                }
+            })
+        }
+    });
+
+    // TODO: Edit event
+    // Edit event is going to be tricky. We're going to have to figure this out later
+    // The problem is that every field can be changed. We need something from
+    // request.query to look up that event in the collection, but "title" can change.
+    // If you think you have a solution to this, go for it! Something that might work is if
+    // we just keep track of how many insertions were done. Then we could have an eventID
+    // = # insertions done so far + 1. That should be unique. However, getting this data
+    // to persist will be difficult (we shut off the server, insertions done would reset to 0,
+    // I'd imagine).
+    /*app.post('/editEvent', async (request, response) => {
+        let exists = false;
+        await db.collection('Events').find({
+            eventID : request.query.eventID
+        }).toArray()
+            .then((result) => {
+                // if there's an event with that title already, then edit
+                if (result.length > 0) {
+                    exists = true;
+                }
+                else if (result.length == 0) {
+                    response.status(400).json("Cannot edit an event that does not exist!")
+                }
+            })
+
+        if (exists) { // only if the User does exist, edit it. (if it doesn't exists, don't edit it)
+            console.log('Editing Event');
+
+            await db.collection('Event').updateOne(
+                { eventID: request.query.eventID },
+                {
+                    $set: {
+                        organization: request.query.organization,
+                        time: request.query.time,
+                        title: request.query.title,
+                        keywords: request.query.keywords,
+                        description: request.query.description
+                    },
+                    $currentDate: { lastModified: true }
+                },
+                (err, result) => {
+                    if (err) {
+                        response.status(400).json('Failed to edit event');
+                    } else {
+                        response.status(200).json('Successfully edited Event!');
+                    }
+                })
+        }
+    });*/
+
+    // delete event
+    app.post('/deleteEvent', async (request, response) => {
+    const title = request.query.title;
+    // first look for the name
+    let exists = false;
+    await db.collection('Events').find({
+        title : title
+    }).toArray()
+        .then((result) => {
+            // if there's a club with that name already, then we can delete
+            if (result.length > 0) {
+                exists = true;
+            }
+            else
+                response.status(400).json("Can't delete an event that doesn't exist")
+        })
+
+    if (exists) {
+        await db.collection('Events').deleteOne({title: title}, (err, result) => {
+            if (err) {
+                //console.log('Failed to delete org: ' + err);
+                response.status(400).json('Failed to delete event');
+            } else {
+                //console.log('org deleted successfully!');
+                response.status(200).json('Successfully deleted event!');
+            }
+        })
+    }
+});
+
+    // ---------------------------------------------------------------------
+    // ---------------------------- Org Queries ----------------------------
+    // ---------------------------------------------------------------------
 
     // inserts a new org, only if it doesn't yet exist
     app.post('/addOrg', async (request, response) => {
@@ -195,6 +321,10 @@ mongo.connect(function (err) {
                 })
         }
     });
+
+    // ----------------------------------------------------------------------
+    // ---------------------------- User Queries ----------------------------
+    // ----------------------------------------------------------------------
 
     // Returns a user given the username. If no user exists, returns an empty array.
     app.get('/getUser', (request, response) => {
