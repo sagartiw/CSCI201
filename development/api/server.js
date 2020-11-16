@@ -13,6 +13,13 @@ const mongo = new MongoClient(uri);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+// The following code is to circumvent weird CORS errors
+// reference: https://github.com/axios/axios/issues/853#issuecomment-351554276
+app.use(function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    next();
+});
 
 //connect to mongodb database
 mongo.connect(function (err) {
@@ -188,8 +195,10 @@ mongo.connect(function (err) {
             if (result.length > 0) {
                 exists = true;
             }
-            else
+            else {
+                console.log("Event doesn't exist!")
                 response.status(400).json("Can't delete an event that doesn't exist")
+            }
         })
 
     if (exists) {
