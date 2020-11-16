@@ -468,7 +468,6 @@ mongo.connect(function (err) {
             username : request.query.username
         }).toArray()
             .then((result) => {
-                // if there's a User with that name already, don't add again
                 if (result.length > 0) {
                     exists = true;
                 }
@@ -519,11 +518,79 @@ mongo.connect(function (err) {
                 },
                 (err, result) => {
                     if (err) {
-                        //console.log('Failed to delete org: ' + err);
                         response.status(400).json('Failed to add Org to User');
                     } else {
-                        //console.log('org deleted successfully!');
                         response.status(200).json('Successfully added Org to User!');
+                    }
+                })
+        }
+    });
+
+    // deletes an org from a certain user, only if the user exists and the org is already in the user
+    app.post('/deleteOrgFromUser', async (request, response) => {
+        let exists = false;
+        let exists2 = false;
+        let exists3 = false;
+        // Check if the user exists
+        await db.collection('Users').find({
+            username : request.query.username
+        }).toArray()
+            .then((result) => {
+                if (result.length > 0) {
+                    exists = true;
+                }
+                else {
+                    response.status(400).json("Cannot delete an org from a user that doesn't exist!")
+                }
+            })
+
+        // Check if the org exists
+        await db.collection('Organizations').find({
+            name : request.query.organization
+        }).toArray()
+            .then((result) => {
+                if (result.length > 0) {
+                    exists2 = true;
+                }
+                else {
+                    response.status(400).json("Org doesn't exist!")
+                }
+            })
+
+        // If the user and org exist, check if the org is already in that user
+        if(exists && exists2) {
+            await db.collection('Users').find({
+                username : request.query.username,
+                memberOrgs : request.query.organization
+            }).toArray()
+                .then((result) => {
+                    // if there's a User with that name already, don't add again
+                    if (result.length > 0) {
+                        exists3 = true;
+                    }
+                    else {
+                        response.status(400).json("Member is not in that org!")
+                    }
+                })
+        }
+
+        if (exists && exists2 && exists3) { // Only if User and Org exists and User is in that Org
+            console.log('Deleting Org From User');
+            await db.collection('Users').updateOne(
+                { username : request.query.username },
+                {
+                    $pull : {
+                        memberOrgs : request.query.organization
+                    },
+                    $currentDate : {
+                        created: true
+                    }
+                },
+                (err, result) => {
+                    if (err) {
+                        response.status(400).json('Failed to delete Org from User');
+                    } else {
+                        response.status(200).json('Successfully deleted Org from User!');
                     }
                 })
         }
