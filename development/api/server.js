@@ -457,6 +457,77 @@ mongo.connect(function (err) {
             })
         }
     });
+
+    // adds an org to the user, only if the user exists and the org is not already in the user
+    app.post('/addOrgToUser', async (request, response) => {
+        let exists = false;
+        let exists2 = false;
+        let exists3 = false;
+        // Check if the user exists
+        await db.collection('Users').find({
+            username : request.query.username
+        }).toArray()
+            .then((result) => {
+                // if there's a User with that name already, don't add again
+                if (result.length > 0) {
+                    exists = true;
+                }
+                else {
+                    response.status(400).json("Cannot add an org to a user that doesn't exist!")
+                }
+            })
+
+        // Check if the org exists
+        await db.collection('Organizations').find({
+            name : request.query.organization
+        }).toArray()
+            .then((result) => {
+                if (result.length > 0) {
+                    exists3 = true;
+                }
+                else {
+                    response.status(400).json("Org doesn't exist!")
+                }
+            })
+
+        // If the user and org exist, check if the org is already in that user
+        if(exists && exists3) {
+            await db.collection('Users').find({
+                username : request.query.username,
+                memberOrgs : request.query.organization
+            }).toArray()
+                .then((result) => {
+                    // if there's a User with that name already, don't add again
+                    if (result.length > 0) {
+                        exists2 = true;
+                        response.status(400).json("Member already is in that org!")
+                    }
+                })
+        }
+
+        if (exists && exists3 && !exists2) { // Only if User exists and User is not already in that Org
+            console.log('Adding Org to User');
+            await db.collection('Users').updateOne(
+                { username : request.query.username },
+                {
+                    $push : {
+                        memberOrgs : request.query.organization
+                    },
+                    $currentDate : {
+                        created: true
+                    }
+                },
+                (err, result) => {
+                    if (err) {
+                        //console.log('Failed to delete org: ' + err);
+                        response.status(400).json('Failed to add Org to User');
+                    } else {
+                        //console.log('org deleted successfully!');
+                        response.status(200).json('Successfully added Org to User!');
+                    }
+                })
+        }
+    });
 });
 
 app.get('/', function (req, res) {
