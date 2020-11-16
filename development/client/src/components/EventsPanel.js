@@ -17,6 +17,7 @@ export const EventsPanel = () => {
                         <ListGroupItem className="d-flex" key={event.id}>
                             <strong>{event.name}</strong>
                             <div className="ml-auto">
+                                <Link to={`/DetailEvent/${event.id}`} color="success" className="btn btn-success mr-1">Details</Link>
                                 <Link to={`/EditEvent/${event.id}`} color="warning" className="btn btn-warning mr-1">Edit</Link>
                                 <Button onClick={() => removeEvent(event.id)} color="danger">Delete</Button>
                             </div>
