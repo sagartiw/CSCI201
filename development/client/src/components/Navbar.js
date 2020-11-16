@@ -17,6 +17,9 @@ export const NavbarPanel = () => {
                    <NavItem>
                        <Link className="btn btn-primary" to={"/AddEvent"}>Add Event</Link>
                    </NavItem>
+                   <NavItem>
+                       <Link className="btn btn-primary" to={"/Profile"}>My Profile</Link>
+                   </NavItem>
                </Nav>
            </Container>
        </Navbar>
