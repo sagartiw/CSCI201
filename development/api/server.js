@@ -98,7 +98,7 @@ mongo.connect(function (err) {
     app.post('/addEvent', async (request, response) => {
         let exists = false;
         await db.collection('Events').find({
-            title : request.query.title
+            name : request.body.name
         }).toArray()
             .then((result) => {
                 // if there's a club with that name already, don't add again
@@ -113,17 +113,17 @@ mongo.connect(function (err) {
             console.log('Adding event');
             let newOrg =
                 {
-                    organization: request.query.organization,
-                    time: request.query.time,
-                    title: request.query.title,
-                    keywords: request.query.keywords,
-                    description: request.query.description,
+                    organization: request.body.organization,
+                    time: request.body.time,
+                    name: request.body.name,
+                    keywords: request.body.keywords,
+                    description: request.body.description,
                     created: new Date(Date.now()).toISOString()
                 };
 
             await db.collection('Events').insertOne(newOrg, (err, result) => {
                 if (err) {
-                    //console.log('Failed to add org: ' + err);
+                    console.log('Failed to add org: ' + err);
                     response.status(400).json('Failed to add event');
                 } else {
                     //console.log('org added successfully!');
@@ -184,11 +184,11 @@ mongo.connect(function (err) {
 
     // delete event
     app.post('/deleteEvent', async (request, response) => {
-    const title = request.query.title;
+    const name = request.body.name;
     // first look for the name
     let exists = false;
     await db.collection('Events').find({
-        title : title
+        name : name
     }).toArray()
         .then((result) => {
             // if there's a club with that name already, then we can delete
@@ -202,9 +202,9 @@ mongo.connect(function (err) {
         })
 
     if (exists) {
-        await db.collection('Events').deleteOne({title: title}, (err, result) => {
+        await db.collection('Events').deleteOne({name: name}, (err, result) => {
             if (err) {
-                //console.log('Failed to delete org: ' + err);
+                console.log('Failed to delete org: ' + err);
                 response.status(400).json('Failed to delete event');
             } else {
                 //console.log('org deleted successfully!');
