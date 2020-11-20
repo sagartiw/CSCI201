@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const {MongoClient} = require('mongodb');
+const stream = require('getstream');
 
 var cors = require('cors');
 const app = express();
@@ -731,6 +732,117 @@ mongo.connect(function (err) {
                 })
         }
     });
+
+    // ----------------------------------------------------------------------
+    // ------------------------- Notification Queries -----------------------
+    // ----------------------------------------------------------------------
+
+    // inserts a new notification regardless if something existed earlier.
+    // Date should be input as ISO format but not necessary
+    app.post('/addNotification', async (request, response) => {
+        console.log('Adding Notification');
+        let newNotification =
+            {
+                organization: request.query.organization,
+                title: request.query.title,
+                description: request.query.description,
+                date: new Date(request.query.date),
+                created: new Date(Date.now())
+            };
+
+        await db.collection('Notifications').insertOne(newNotification, (err, result) => {
+            if (err) {
+                //console.log('Failed to add org: ' + err);
+                response.status(400).json('Failed to add notification');
+            } else {
+                //console.log('org added successfully!');
+                response.status(200).json('Successfully added notification!');
+            }
+        })
+    });
+
+    // deletes a User by username, only if it exists
+    app.post('/deleteNotification', async (request, response) => {
+        const title = request.query.title;
+        // first look for the Username
+        let exists = false;
+        await db.collection('Notifications').find({
+            title : title
+        }).toArray()
+            .then((result) => {
+                // if there's a Notification with that name already, we can delete
+                if (result.length > 0) {
+                    exists = true;
+                }
+                else
+                    response.status(400).json("Can't delete a Notification with a title that doesn't exist!")
+            })
+
+        if (exists) {
+            await db.collection('Notifications').deleteOne({title: title}, (err, result) => {
+                if (err) {
+                    //console.log('Failed to delete User: ' + err);
+                    response.status(400).json('Failed to delete Notification');
+                } else {
+                    //console.log('org deleted successfully!');
+                    response.status(200).json('Successfully deleted Notification!');
+                }
+            })
+        }
+    });
+
+    //Gets back a today's notification and adds them to the getstreams API stream
+    //Note: Doesn't add the right thing to the streams API
+    app.get('/getNotification', (request, response) => {
+        //console.log("request params: " +  request.query.username);
+        const start = new Date();
+        start.setHours(0,0,0,0);
+        const end = new Date();
+        end.setHours(23,59,59,999);
+        db.collection('Notifications').find({
+            date: {
+                $gte: start,
+                $lte: end
+            }
+        })
+            .toArray()
+            .then((result) => {
+                console.log("Printing: " + JSON.stringify(result));
+
+                const client = stream.connect(
+                    'g3xp36f3dr8u',
+                    'zb8k2ambvhu87y6hay6bn2bezk58dy3fpx2b3vqdjjcer26jed723nwkbabznj7b',
+                );
+                const notificationFeed = client.feed('user', 'notifications')
+                notificationFeed.addActivity({
+                    actor: 'notifications',
+                    verb: 'attend',
+                    object : item.title,
+                    time: item.date,
+                    foreign_id: 'im not sure'
+                });
+                response.status(200).json(result)
+            })
+            .catch((error) => {
+                response.status(400).send(error.message);
+            })
+    });
+
+    // Retrieve feed from Stream
+    app.get('/feed', async (request, response) => {
+        const client = stream.connect(
+            'g3xp36f3dr8u',
+            'zb8k2ambvhu87y6hay6bn2bezk58dy3fpx2b3vqdjjcer26jed723nwkbabznj7b',
+        );
+        //TODO: resolve undefined username from cookies!
+        let timeline = client.feed('timeline', 'notifications');
+        await timeline.follow('user', 'notifications');
+        const feed = await timeline.get();
+        console.log(feed);
+        response.status(200).send(feed);
+    });
+
+
 });
 
 app.get('/', function (req, res) {
