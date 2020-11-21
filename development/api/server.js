@@ -397,8 +397,8 @@ mongo.connect(function (err) {
                 })
         }
     });
-
-    // Deletes a User to the Org, only if the user and org exists and the user is not already in the org
+    
+    // Deletes a User from the Org, only if the user and org exists and the user is in the org
     app.post('/deleteUserFromOrg', async (request, response) => {
         let exists = false;
         let exists2 = false;
@@ -466,6 +466,143 @@ mongo.connect(function (err) {
                 })
         }
     });
+
+    // Adds an Event to the Org, only if the event and org exists and the event is not already in the org
+    app.post('/addEventToOrg', async (request, response) => {
+        let exists = false;
+        let exists2 = false;
+        let exists3 = false;
+        // Check if the event exists
+        await db.collection('Events').find({
+            eventID : request.query.id
+        }).toArray()
+            .then((result) => {
+                if (result.length > 0) {
+                    exists = true;
+                }
+                else {
+                    response.status(400).json("Event does not exist!")
+                }
+            })
+
+        // Check if the org exists
+        await db.collection('Organizations').find({
+            name : request.query.organization
+        }).toArray()
+            .then((result) => {
+                if (result.length > 0) {
+                    exists2 = true;
+                }
+                else {
+                    response.status(400).json("Cannot add a Event to an Org that doesn't exist!")
+                }
+            })
+
+        // If the user and org exist, check if the User is already in tha Org
+        if(exists && exists2) {
+            await db.collection('Organizations').find({
+                events : request.query.id
+            }).toArray()
+                .then((result) => {
+                    if (result.length > 0) {
+                        exists3 = true;
+                        response.status(400).json("Event already is in that org!")
+                    }
+                })
+        }
+
+        if (exists && exists2 && !exists3) { // Only if Event exists and Event is not already in that Org
+            console.log('Adding Event to Org');
+
+            await db.collection('Organizations').updateOne(
+                { name : request.query.organization },
+                {
+                    $push : {
+                        events : request.query.id
+                    },
+                    $currentDate : {
+                        created: true
+                    }
+                },
+                (err, result) => {
+                    if (err) {
+                        response.status(400).json('Failed to add Event to Org');
+                    } else {
+                        response.status(200).json('Successfully added Event to Org!');
+                    }
+                })
+        }
+    });
+
+    // Deletes an Event from the Org, only if the event and org exists and the event is in the org
+    app.post('/deleteEventFromOrg', async (request, response) => {
+        let exists = false;
+        let exists2 = false;
+        let exists3 = false;
+        // Check if the user exists
+        await db.collection('Events').find({
+            _id : request.query.id
+        }).toArray()
+            .then((result) => {
+                if (result.length > 0) {
+                    exists = true;
+                }
+                else {
+                    response.status(400).json("Event does not exist!")
+                }
+            })
+
+        // Check if the org exists
+        await db.collection('Organizations').find({
+            name : request.query.organization
+        }).toArray()
+            .then((result) => {
+                if (result.length > 0) {
+                    exists2 = true;
+                }
+                else {
+                    response.status(400).json("Cannot delete an Event from an Org that doesn't exist!")
+                }
+            })
+
+        // If the user and org exist, check if the User is already in tha Org
+        if(exists && exists2) {
+            await db.collection('Organizations').find({
+                events : request.query.id
+            }).toArray()
+                .then((result) => {
+                    if (result.length > 0) {
+                        exists3 = true;
+                    }
+                    else {
+                        response.status(400).json("Event is not in that org!")
+                    }
+                })
+        }
+
+        if (exists && exists2 && exists3) { // Only if User exists and User is in that Org
+            console.log('Deleting Event from Org');
+
+            await db.collection('Organizations').updateOne(
+                { name : request.query.organization },
+                {
+                    $pull : {
+                        events : request.query.id
+                    },
+                    $currentDate : {
+                        created: true
+                    }
+                },
+                (err, result) => {
+                    if (err) {
+                        response.status(400).json('Failed to delete Event from Org');
+                    } else {
+                        response.status(200).json('Successfully deleted Event from Org!');
+                    }
+                })
+        }
+    });
+
 
     // ----------------------------------------------------------------------
     // ---------------------------- User Queries ----------------------------
