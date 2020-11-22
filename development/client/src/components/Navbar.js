@@ -28,12 +28,15 @@ export const NavbarPanel = () => {
                <Nav>
                    {isLoggedIn == true &&
                    <NavItem>
-                       <Link className="btn btn-primary" to={"/AddEvent"}>Add Event</Link>
+                       <Link className="btn btn-primary mr-1" to={"/AddEvent"}>Add Event</Link>
                    </NavItem>
                    }
                    {isLoggedIn == true &&
                    <NavItem>
-                       <Link className="btn btn-primary" to={"/Profile"}>My Profile</Link>
+                       <Link className="btn btn-primary mr-1" to={"/Profile"}>My Profile</Link>
+                   </NavItem>
+                   <NavItem>
+                       <Link className="btn btn-primary" to={"/Login"}>Login</Link>
                    </NavItem>
                    }
                </Nav>

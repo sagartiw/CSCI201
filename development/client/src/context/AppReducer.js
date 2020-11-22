@@ -9,6 +9,7 @@ export default (state, action) => {
             // nodemon the backend. When this code is triggered, Axios sends a POST
             // request to endpoint /deleteEvent with data action.payload. From there,
             // the back end takes over. Feel free to ask me (Sam) for more information!
+            console.log(action.payload);
             axios({
                 method: 'post',
                 url: 'http://localhost:4000/deleteEvent',
@@ -28,6 +29,8 @@ export default (state, action) => {
             // but only action.payload.name exists. just different names for the parameter). Nonetheless,
             // You can tell it is working by either checking the MongoDB database or checking the backend
             // console! We can fix this later pretty easily
+            console.log(action.payload);
+            console.log(action.payload.name);
             axios({
                 method: 'post',
                 url: 'http://localhost:4000/addEvent',
