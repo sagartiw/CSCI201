@@ -595,6 +595,24 @@ mongo.connect(function (err) {
         }
     });
 
+    // Given a username and password, return true if the combination exists in the database (is correct). Otherwise, false
+    app.get('/login', (request, response) => {
+        db.collection('Users').find({
+            username: request.body.username,
+            password: request.body.password
+        })
+            .toArray()
+            .then((result) => {
+                if (result.length == 0) // if there are no results, return false
+                    response.status(200).json('False');
+                else
+                    response.status(200).json('True');
+            })
+            .catch((error) => {
+                response.status(400).send(error.message);
+            })
+    });
+
     // adds an org to the user, only if the user exists and the org is not already in the user
     app.post('/addOrgToUser', async (request, response) => {
         let exists = false;
