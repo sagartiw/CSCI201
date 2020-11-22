@@ -99,11 +99,11 @@ mongo.connect(function (err) {
     app.post('/addEvent', async (request, response) => {
         let exists = false;
         await db.collection('Events').find({
-            id : request.query.id
+            id : request.body.id
         }).toArray()
             .then((result) => {
                 // if there's an event with that name already, don't add again
-                if (result.length > 0) {
+                if (request.body.id != null && result.length > 0) {
                     response.status(400).json("Event already exists!")
                     exists = true;
                     console.log(result);
@@ -114,12 +114,12 @@ mongo.connect(function (err) {
             console.log('Adding event');
             let newOrg =
                 {
-                    id: request.query.id,
-                    organization: request.query.organization,
-                    time: request.query.time,
-                    name: request.query.name,
-                    keywords: request.query.keywords,
-                    description: request.query.description,
+                    id: request.body.id,
+                    organization: request.body.organization,
+                    time: request.body.time,
+                    name: request.body.name,
+                    keywords: request.body.keywords,
+                    description: request.body.description,
                     created: new Date(Date.now()).toISOString()
                 };
 
@@ -135,19 +135,10 @@ mongo.connect(function (err) {
         }
     });
 
-    // TODO: Edit event
-    // Edit event is going to be tricky. We're going to have to figure this out later
-    // The problem is that every field can be changed. We need something from
-    // request.query to look up that event in the collection, but "title" can change.
-    // If you think you have a solution to this, go for it! Something that might work is if
-    // we just keep track of how many insertions were done. Then we could have an eventID
-    // = # insertions done so far + 1. That should be unique. However, getting this data
-    // to persist will be difficult (we shut off the server, insertions done would reset to 0,
-    // I'd imagine).
     app.post('/editEvent', async (request, response) => {
         let exists = false;
         await db.collection('Events').find({
-            id : request.query.id
+            id : request.body.id
         }).toArray()
             .then((result) => {
                 // if there's an event with that title already, then edit
@@ -163,15 +154,15 @@ mongo.connect(function (err) {
             console.log('Editing Event');
 
             var editedEvent = {
-                id: request.query.id,
-                organization: request.query.organization,
-                time: request.query.time,
-                name: request.query.name,
-                keywords: request.query.keywords,
-                description: request.query.description
+                id: request.body.id,
+                organization: request.body.organization,
+                time: request.body.time,
+                name: request.body.name,
+                keywords: request.body.keywords,
+                description: request.body.description
             }
             await db.collection('Events').updateOne(
-                { id: request.query.id },
+                { id: request.body.id },
                 {
                     $set: editedEvent,
                     $currentDate: { lastModified: true }
@@ -183,24 +174,6 @@ mongo.connect(function (err) {
                         response.status(200).json('Successfully edited Event!');
                     }
                 })
-
-            // edit event in the org array
-            // await db.collection('Organizations').updateOne(
-            //     {
-            //         $pull: {
-            //             events: request.query.name
-            //         },
-            //         $push: {
-            //             events: request.query.name
-            //         }
-            //     },
-            //     (err, result) => {
-            //         if (err) {
-            //             response.status(400).json('Failed to edit event');
-            //         } else {
-            //             response.status(200).json('Successfully edited Event!');
-            //         }
-            //     })
         }
     });
 
@@ -244,7 +217,7 @@ mongo.connect(function (err) {
     app.post('/addOrg', async (request, response) => {
         let exists = false;
         await db.collection('Organizations').find({
-            name : request.query.name
+            name : request.body.name
         }).toArray()
             .then((result) => {
                 // if there's a club with that name already, don't add again
@@ -259,12 +232,12 @@ mongo.connect(function (err) {
             console.log('Adding org');
             let newOrg =
                 {
-                    name: request.query.name,
+                    name: request.body.name,
                     users: [],
                     events: [],
-                    description: request.query.description,
-                    school: request.query.school,
-                    keywords: request.query.keywords,
+                    description: request.body.description,
+                    school: request.body.school,
+                    keywords: request.body.keywords,
                     created: new Date(Date.now()).toISOString()
                 };
 
@@ -282,7 +255,7 @@ mongo.connect(function (err) {
 
     // deletes an org by name, only if it exists
     app.post('/deleteOrg', async (request, response) => {
-        const name = request.query.name;
+        const name = request.body.name;
         // first look for the name
         let exists = false;
         await db.collection('Organizations').find({
@@ -316,7 +289,7 @@ mongo.connect(function (err) {
     app.post('/editOrg', async (request, response) => {
         let exists = false;
         await db.collection('Organizations').find({
-            name : request.query.name
+            name : request.body.name
         }).toArray()
             .then((result) => {
                 // if there's a club with that name already, don't add again
@@ -330,12 +303,12 @@ mongo.connect(function (err) {
         if (exists) { // only if the org exists do we attempt to update the information
             console.log('Editing org');
             await db.collection('Organizations').updateOne(
-                { name : request.query.name },
+                { name : request.body.name },
                 {
                     $set: {
-                        description: request.query.description,
-                        school : request.query.school,
-                        keywords :request.query.keywords,
+                        description: request.body.description,
+                        school : request.body.school,
+                        keywords :request.body.keywords,
                     },
                     $currentDate: {
                         created: true
@@ -360,7 +333,7 @@ mongo.connect(function (err) {
         let exists3 = false;
         // Check if the user exists
         await db.collection('Users').find({
-            username : request.query.username
+            username : request.body.username
         }).toArray()
             .then((result) => {
                 if (result.length > 0) {
@@ -373,7 +346,7 @@ mongo.connect(function (err) {
 
         // Check if the org exists
         await db.collection('Organizations').find({
-            name : request.query.organization
+            name : request.body.organization
         }).toArray()
             .then((result) => {
                 if (result.length > 0) {
@@ -387,7 +360,7 @@ mongo.connect(function (err) {
         // If the user and org exist, check if the User is already in tha Org
         if(exists && exists2) {
             await db.collection('Organizations').find({
-                users : request.query.username
+                users : request.body.username
             }).toArray()
                 .then((result) => {
                     if (result.length > 0) {
@@ -401,10 +374,10 @@ mongo.connect(function (err) {
             console.log('Adding User to Org');
 
             await db.collection('Organizations').updateOne(
-                { name : request.query.organization },
+                { name : request.body.organization },
                 {
                     $push : {
-                        users : request.query.username
+                        users : request.body.username
                     },
                     $currentDate : {
                         created: true
@@ -427,7 +400,7 @@ mongo.connect(function (err) {
         let exists3 = false;
         // Check if the user exists
         await db.collection('Users').find({
-            username : request.query.username
+            username : request.body.username
         }).toArray()
             .then((result) => {
                 if (result.length > 0) {
@@ -440,7 +413,7 @@ mongo.connect(function (err) {
 
         // Check if the org exists
         await db.collection('Organizations').find({
-            name : request.query.organization
+            name : request.body.organization
         }).toArray()
             .then((result) => {
                 if (result.length > 0) {
@@ -454,7 +427,7 @@ mongo.connect(function (err) {
         // If the user and org exist, check if the User is already in tha Org
         if(exists && exists2) {
             await db.collection('Organizations').find({
-                users : request.query.username
+                users : request.body.username
             }).toArray()
                 .then((result) => {
                     if (result.length > 0) {
@@ -470,10 +443,10 @@ mongo.connect(function (err) {
             console.log('Deleting User from Org');
 
             await db.collection('Organizations').updateOne(
-                { name : request.query.organization },
+                { name : request.body.organization },
                 {
                     $pull : {
-                        users : request.query.username
+                        users : request.body.username
                     },
                     $currentDate : {
                         created: true
@@ -496,7 +469,7 @@ mongo.connect(function (err) {
         let exists3 = false;
         // Check if the event exists
         await db.collection('Events').find({
-            eventID : request.query.id
+            id : request.body.id
         }).toArray()
             .then((result) => {
                 if (result.length > 0) {
@@ -509,7 +482,7 @@ mongo.connect(function (err) {
 
         // Check if the org exists
         await db.collection('Organizations').find({
-            name : request.query.organization
+            name : request.body.organization
         }).toArray()
             .then((result) => {
                 if (result.length > 0) {
@@ -523,7 +496,7 @@ mongo.connect(function (err) {
         // If the user and org exist, check if the User is already in tha Org
         if(exists && exists2) {
             await db.collection('Organizations').find({
-                events : request.query.id
+                events : request.body.id
             }).toArray()
                 .then((result) => {
                     if (result.length > 0) {
@@ -537,10 +510,10 @@ mongo.connect(function (err) {
             console.log('Adding Event to Org');
 
             await db.collection('Organizations').updateOne(
-                { name : request.query.organization },
+                { name : request.body.organization },
                 {
                     $push : {
-                        events : request.query.id
+                        events : request.body.id
                     },
                     $currentDate : {
                         created: true
@@ -563,7 +536,7 @@ mongo.connect(function (err) {
         let exists3 = false;
         // Check if the user exists
         await db.collection('Events').find({
-            _id : request.query.id
+            _id : request.body.id
         }).toArray()
             .then((result) => {
                 if (result.length > 0) {
@@ -576,7 +549,7 @@ mongo.connect(function (err) {
 
         // Check if the org exists
         await db.collection('Organizations').find({
-            name : request.query.organization
+            name : request.body.organization
         }).toArray()
             .then((result) => {
                 if (result.length > 0) {
@@ -590,7 +563,7 @@ mongo.connect(function (err) {
         // If the user and org exist, check if the User is already in tha Org
         if(exists && exists2) {
             await db.collection('Organizations').find({
-                events : request.query.id
+                events : request.body.id
             }).toArray()
                 .then((result) => {
                     if (result.length > 0) {
@@ -606,10 +579,10 @@ mongo.connect(function (err) {
             console.log('Deleting Event from Org');
 
             await db.collection('Organizations').updateOne(
-                { name : request.query.organization },
+                { name : request.body.organization },
                 {
                     $pull : {
-                        events : request.query.id
+                        events : request.body.id
                     },
                     $currentDate : {
                         created: true
@@ -632,9 +605,9 @@ mongo.connect(function (err) {
 
     // Returns a user given the username. If no user exists, returns an empty array.
     app.get('/getUser', (request, response) => {
-        console.log("request params: " +  request.query.username);
+        console.log("request params: " +  request.body.username);
         db.collection('Users').find({
-            username: request.query.username
+            username: request.body.username
         })
             .toArray()
             .then((result) => {
@@ -649,7 +622,7 @@ mongo.connect(function (err) {
     app.post('/addUser', async (request, response) => {
         let exists = false;
         await db.collection('Users').find({
-            username : request.query.username
+            username : request.body.username
         }).toArray()
             .then((result) => {
                 // if there's a User with that name already, don't add again
@@ -664,10 +637,10 @@ mongo.connect(function (err) {
             console.log('Adding User');
             let newUser =
                 {
-                    username: request.query.username,
-                    password: request.query.password,
-                    firstName: request.query.firstName,
-                    lastName: request.query.lastName,
+                    username: request.body.username,
+                    password: request.body.password,
+                    firstName: request.body.firstName,
+                    lastName: request.body.lastName,
                     memberOrgs: [],
                     created: new Date(Date.now()).toISOString()
                 };
@@ -688,7 +661,7 @@ mongo.connect(function (err) {
     app.post('/editUser', async (request, response) => {
         let exists = false;
         await db.collection('Users').find({
-            username : request.query.username
+            username : request.body.username
         }).toArray()
             .then((result) => {
                 // if there's a User with that name already, it is okay to edit
@@ -704,12 +677,12 @@ mongo.connect(function (err) {
             console.log('Editing User');
 
             await db.collection('Users').updateOne(
-                { username: request.query.username },
+                { username: request.body.username },
                 {
                     $set: {
-                        password: request.query.password,
-                        firstName: request.query.firstName,
-                        lastName: request.query.lastName
+                        password: request.body.password,
+                        firstName: request.body.firstName,
+                        lastName: request.body.lastName
                     },
                     $currentDate: { lastModified: true }
                 },
@@ -725,7 +698,7 @@ mongo.connect(function (err) {
 
     // deletes a User by username, only if it exists
     app.post('/deleteUser', async (request, response) => {
-        const username = request.query.username;
+        const username = request.body.username;
         // first look for the Username
         let exists = false;
         await db.collection('Users').find({
@@ -778,7 +751,7 @@ mongo.connect(function (err) {
         let exists3 = false;
         // Check if the user exists
         await db.collection('Users').find({
-            username : request.query.username
+            username : request.body.username
         }).toArray()
             .then((result) => {
                 if (result.length > 0) {
@@ -791,7 +764,7 @@ mongo.connect(function (err) {
 
         // Check if the org exists
         await db.collection('Organizations').find({
-            name : request.query.organization
+            name : request.body.organization
         }).toArray()
             .then((result) => {
                 if (result.length > 0) {
@@ -805,8 +778,8 @@ mongo.connect(function (err) {
         // If the user and org exist, check if the org is already in that user
         if(exists && exists3) {
             await db.collection('Users').find({
-                username : request.query.username,
-                memberOrgs : request.query.organization
+                username : request.body.username,
+                memberOrgs : request.body.organization
             }).toArray()
                 .then((result) => {
                     // if there's a User with that name already, don't add again
@@ -820,10 +793,10 @@ mongo.connect(function (err) {
         if (exists && exists3 && !exists2) { // Only if User exists and User is not already in that Org
             console.log('Adding Org to User');
             await db.collection('Users').updateOne(
-                { username : request.query.username },
+                { username : request.body.username },
                 {
                     $push : {
-                        memberOrgs : request.query.organization
+                        memberOrgs : request.body.organization
                     },
                     $currentDate : {
                         created: true
@@ -846,7 +819,7 @@ mongo.connect(function (err) {
         let exists3 = false;
         // Check if the user exists
         await db.collection('Users').find({
-            username : request.query.username
+            username : request.body.username
         }).toArray()
             .then((result) => {
                 if (result.length > 0) {
@@ -859,7 +832,7 @@ mongo.connect(function (err) {
 
         // Check if the org exists
         await db.collection('Organizations').find({
-            name : request.query.organization
+            name : request.body.organization
         }).toArray()
             .then((result) => {
                 if (result.length > 0) {
@@ -873,8 +846,8 @@ mongo.connect(function (err) {
         // If the user and org exist, check if the org is already in that user
         if(exists && exists2) {
             await db.collection('Users').find({
-                username : request.query.username,
-                memberOrgs : request.query.organization
+                username : request.body.username,
+                memberOrgs : request.body.organization
             }).toArray()
                 .then((result) => {
                     // if there's a User with that name already, don't add again
@@ -890,10 +863,10 @@ mongo.connect(function (err) {
         if (exists && exists2 && exists3) { // Only if User and Org exists and User is in that Org
             console.log('Deleting Org From User');
             await db.collection('Users').updateOne(
-                { username : request.query.username },
+                { username : request.body.username },
                 {
                     $pull : {
-                        memberOrgs : request.query.organization
+                        memberOrgs : request.body.organization
                     },
                     $currentDate : {
                         created: true
@@ -919,10 +892,10 @@ mongo.connect(function (err) {
         console.log('Adding Notification');
         let newNotification =
             {
-                organization: request.query.organization,
-                title: request.query.title,
-                description: request.query.description,
-                date: new Date(request.query.date),
+                organization: request.body.organization,
+                title: request.body.title,
+                description: request.body.description,
+                date: new Date(request.body.date),
                 created: new Date(Date.now())
             };
 
@@ -939,7 +912,7 @@ mongo.connect(function (err) {
 
     // deletes a User by username, only if it exists
     app.post('/deleteNotification', async (request, response) => {
-        const title = request.query.title;
+        const title = request.body.title;
         // first look for the Username
         let exists = false;
         await db.collection('Notifications').find({
