@@ -1,4 +1,5 @@
 import React from 'react';
+import {useState} from 'react';
 import { Link } from 'react-router-dom';
 import {
     Navbar,
@@ -9,17 +10,32 @@ import {
 } from 'reactstrap';
 
 export const NavbarPanel = () => {
+
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+
+    function temp()
+    {
+        if (localStorage.getItem('username') != null)
+            setIsLoggedIn(true);
+        else setIsLoggedIn(false);
+    }
+
    return(
        <Navbar className="mb-2" color="dark" dark>
            <Container>
                <NavbarBrand href={"/"}>StuOrgCentral</NavbarBrand>
                <Nav>
+                   {isLoggedIn == true &&
                    <NavItem>
                        <Link className="btn btn-primary" to={"/AddEvent"}>Add Event</Link>
                    </NavItem>
+                   }
+                   {isLoggedIn == true &&
                    <NavItem>
                        <Link className="btn btn-primary" to={"/Profile"}>My Profile</Link>
                    </NavItem>
+                   }
                </Nav>
            </Container>
        </Navbar>
