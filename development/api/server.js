@@ -99,14 +99,14 @@ mongo.connect(function (err) {
     app.post('/addEvent', async (request, response) => {
         let exists = false;
         await db.collection('Events').find({
-            name : request.body.name
+            id : request.query.id
         }).toArray()
             .then((result) => {
-                // if there's a club with that name already, don't add again
+                // if there's an event with that name already, don't add again
                 if (result.length > 0) {
                     response.status(400).json("Event already exists!")
                     exists = true;
-                    console.log('Event exists');
+                    console.log(result);
                 }
             })
 
@@ -114,11 +114,12 @@ mongo.connect(function (err) {
             console.log('Adding event');
             let newOrg =
                 {
-                    organization: request.body.organization,
-                    time: request.body.time,
-                    name: request.body.name,
-                    keywords: request.body.keywords,
-                    description: request.body.description,
+                    id: request.query.id,
+                    organization: request.query.organization,
+                    time: request.query.time,
+                    name: request.query.name,
+                    keywords: request.query.keywords,
+                    description: request.query.description,
                     created: new Date(Date.now()).toISOString()
                 };
 
@@ -143,10 +144,10 @@ mongo.connect(function (err) {
     // = # insertions done so far + 1. That should be unique. However, getting this data
     // to persist will be difficult (we shut off the server, insertions done would reset to 0,
     // I'd imagine).
-    /*app.post('/editEvent', async (request, response) => {
+    app.post('/editEvent', async (request, response) => {
         let exists = false;
         await db.collection('Events').find({
-            eventID : request.query.eventID
+            id : request.query.id
         }).toArray()
             .then((result) => {
                 // if there's an event with that title already, then edit
@@ -158,19 +159,21 @@ mongo.connect(function (err) {
                 }
             })
 
-        if (exists) { // only if the User does exist, edit it. (if it doesn't exists, don't edit it)
+        if (exists) { // only if the Event does exist, edit it. (if it doesn't exists, don't edit it)
             console.log('Editing Event');
 
-            await db.collection('Event').updateOne(
-                { eventID: request.query.eventID },
+            var editedEvent = {
+                id: request.query.id,
+                organization: request.query.organization,
+                time: request.query.time,
+                name: request.query.name,
+                keywords: request.query.keywords,
+                description: request.query.description
+            }
+            await db.collection('Events').updateOne(
+                { id: request.query.id },
                 {
-                    $set: {
-                        organization: request.query.organization,
-                        time: request.query.time,
-                        title: request.query.title,
-                        keywords: request.query.keywords,
-                        description: request.query.description
-                    },
+                    $set: editedEvent,
                     $currentDate: { lastModified: true }
                 },
                 (err, result) => {
@@ -180,8 +183,26 @@ mongo.connect(function (err) {
                         response.status(200).json('Successfully edited Event!');
                     }
                 })
+
+            // edit event in the org array
+            // await db.collection('Organizations').updateOne(
+            //     {
+            //         $pull: {
+            //             events: request.query.name
+            //         },
+            //         $push: {
+            //             events: request.query.name
+            //         }
+            //     },
+            //     (err, result) => {
+            //         if (err) {
+            //             response.status(400).json('Failed to edit event');
+            //         } else {
+            //             response.status(200).json('Successfully edited Event!');
+            //         }
+            //     })
         }
-    });*/
+    });
 
     // delete event
     app.post('/deleteEvent', async (request, response) => {
