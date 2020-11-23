@@ -1,6 +1,7 @@
 import React from 'react';
 import {useState, useEffect} from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 import {
     Navbar,
     Nav,
@@ -21,7 +22,7 @@ export const NavbarPanel = () => {
             console.log("user logged in");
         }
         else setIsLoggedIn(false);
-    })
+    }, [])
 
    return(
        <Navbar className="mb-2" color="dark" dark>
@@ -35,12 +36,12 @@ export const NavbarPanel = () => {
                    }
                    {isLoggedIn == true &&
                    <NavItem>
-                       <Link className="btn btn-primary mr-1" to={"/Profile"}>My Profile</Link>
+                       <Link className="btn btn-primary mr-1" to={`/Profile`}>My Profile</Link>
                    </NavItem>
                    }
 
                    <NavItem>
-                       <Link className="btn btn-primary" to={"/Login"}>Login</Link>
+                       <Link className="btn btn-primary" to={`/Login`}>Login</Link>
                    </NavItem>
 
                </Nav>

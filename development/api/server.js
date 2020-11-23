@@ -605,9 +605,9 @@ mongo.connect(function (err) {
 
     // Returns a user given the username. If no user exists, returns an empty array.
     app.get('/getUser', (request, response) => {
-        console.log("request params: " +  request.body.username);
+        console.log("request params: " +  request.query.username);
         db.collection('Users').find({
-            username: request.body.username
+            username: request.query.username
         })
             .toArray()
             .then((result) => {
