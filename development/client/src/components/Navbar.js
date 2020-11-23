@@ -36,11 +36,11 @@ export const NavbarPanel = () => {
                        <Link className="btn btn-primary mr-1" to={"/Profile"}>My Profile</Link>
                    </NavItem>
                    }
-                   {isLoggedIn == true &&
+
                    <NavItem>
                        <Link className="btn btn-primary" to={"/Login"}>Login</Link>
                    </NavItem>
-                   }
+
                </Nav>
            </Container>
        </Navbar>

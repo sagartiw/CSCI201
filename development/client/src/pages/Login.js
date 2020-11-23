@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, {useState, useContext} from 'react';
 import { GlobalContext } from "../context/GlobalState";
 import { Link, useHistory } from 'react-router-dom';
@@ -11,6 +12,9 @@ import {
 } from 'reactstrap';
 import { NavbarPanel } from "../components/Navbar";
 
+
+
+
 export const Login = () => {
     const [name, setName] = useState('');
     const{ login } = useContext(GlobalContext);
@@ -21,43 +25,28 @@ export const Login = () => {
     const [attemptMessage, setAttemptMessage] = useState("");
     const [loginSuccess, setLoginSuccess] = useState(false);
 
-    const onSubmit = () => {
-        const newEvent = {
-            id: uuid,
-            name
-        }
-        login(newEvent);
-        history.push("/");
+    async function onSubmit(){
 
-        let requestOptions = {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(payload)
-        };
-        let payload = {
-            'username': username,
-            'password': password
-        };
+
+
 
         let url = "localhost:4000/login";
 
-        fetch(url, requestOptions)
-            .then((response) => {
+        const res = await axios.get(url,{params: {username: 'JohnUsername', password: '123password'}});
 
-                if(response.Json == 200)
-                    localStorage.setItem('userName', null );
+        if (res.status == 200)
+        {
+            localStorage.setItem('username', username);
+        }
+        else {
+            localStorage.setItem('username', null)
+        }
 
-                if (response.Json == 400)
-                    localStorage.setItem('userName', null );
-            })
-
-    }
-
-    const onChange = (e) =>{
+        const onChange = (e) =>{
         setName(e.target.value);
     }
 
-
+    }
 
     return(
 
@@ -69,16 +58,16 @@ export const Login = () => {
         <p></p>
         <p>Login: </p>
         <Input type="text" name="name" onChange={e => setUsername(e.target.value)} placeholder="Username"></Input>
-        <Input type="text" name="name" onChange={onChange} placeholder="Password"></Input>
+        <Input type="text" name="name" onChange={e => setPassword(e.target.value)} placeholder="Password"></Input>
         <p>
         </p>
-        <button className="btn btn-primary">Sign-in</button>
+        <button className="btn btn-primary" onClick={onSubmit}>Sign-in</button>
 
         <br></br>
         <br></br>
         <p>Register: </p>
-        <Input type="text" name="name" onChange={onChange} placeholder="Username"></Input>
-        <Input type="text" name="name" onChange={onChange} placeholder="Password"></Input>
+        <Input type="text" name="name" onChange={e => setUsername(e.target.value)} placeholder="Username"></Input>
+        <Input type="text" name="name" onChange={e => setPassword(e.target.value)} placeholder="Password"></Input>
         <p>
         </p>
         <button className="btn btn-primary">Register</button>
