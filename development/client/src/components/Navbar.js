@@ -1,5 +1,5 @@
 import React from 'react';
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import {
     Navbar,
@@ -13,13 +13,16 @@ export const NavbarPanel = () => {
 
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-
-    function temp()
-    {
-        if (localStorage.getItem('username') != null)
+    useEffect(() => {
+        console.log("HELLO ITS CAROL");
+        const loggedin = localStorage.getItem('username')
+        console.log("username is " + localStorage.getItem('username'));
+        if (loggedin != null) {
             setIsLoggedIn(true);
+            console.log("user logged in");
+        }
         else setIsLoggedIn(false);
-    }
+    })
 
    return(
        <Navbar className="mb-2" color="dark" dark>

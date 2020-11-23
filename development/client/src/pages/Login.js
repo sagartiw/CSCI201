@@ -12,31 +12,26 @@ import {
 } from 'reactstrap';
 import { NavbarPanel } from "../components/Navbar";
 
-
-
-
 export const Login = () => {
     const [name, setName] = useState('');
     const{ login } = useContext(GlobalContext);
     const history = useHistory();
 
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
+    const [UserUsername, setUsername] = useState("");
+    const [UserPassword, setPassword] = useState("");
     const [attemptMessage, setAttemptMessage] = useState("");
     const [loginSuccess, setLoginSuccess] = useState(false);
 
     async function onSubmit(){
 
+        let url = "http://localhost:4000/login";
 
-
-
-        let url = "localhost:4000/login";
-
-        const res = await axios.get(url,{params: {username: 'JohnUsername', password: '123password'}});
+        const res = await axios.get(url, {params: {username: UserUsername, password: UserPassword}});
 
         if (res.status == 200)
         {
-            localStorage.setItem('username', username);
+            localStorage.setItem('username', UserUsername);
+            window.location.reload(false);
         }
         else {
             localStorage.setItem('username', null)

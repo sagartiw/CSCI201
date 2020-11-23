@@ -729,13 +729,13 @@ mongo.connect(function (err) {
     // Given a username and password, return true if the combination exists in the database (is correct). Otherwise, false
     app.get('/login', (request, response) => {
         db.collection('Users').find({
-            username: request.body.username,
-            password: request.body.password
+            username: request.query.username,
+            password: request.query.password
         })
             .toArray()
             .then((result) => {
                 if (result.length == 0) // if there are no results, return false
-                    response.status(200).json('False');
+                    response.status(400).json('False');
                 else
                     response.status(200).json('True');
             })
