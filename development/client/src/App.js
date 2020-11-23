@@ -3,6 +3,7 @@ import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import {Home} from './pages/Home';
 import {AddEvent} from './pages/AddEvent';
 import {EditEvent} from './pages/EditEvent';
+import {DetailEvent} from "./pages/DetailEvent";
 import {Profile} from './pages/Profile';
 import {Login} from './pages/Login';
 import {EditProfile} from './pages/EditProfile';
@@ -22,6 +23,7 @@ function App() {
                       <Route path ='/Home' component={Home} />
                       <Route path ='/Profile' component={Profile} />
                       <Route path ='/EditProfile' component={EditProfile} />
+                      <Route path ='/DetailEvent/:id' component={DetailEvent}/>
                   </Switch>
               </Router>
           </GlobalProvider>

@@ -29,7 +29,7 @@ export const DetailEvent = (props) => {
     return(
         <div>
             <NavbarPanel/>
-            <Form onSubmit={onSubmit} style={{maxWidth: "30rem", padding:"1rem"}}>
+            <Form style={{maxWidth: "30rem", padding:"1rem"}}>
                 <FormGroup>
                     <Label>Name</Label>
                     <Input type="text" name="name" value={selectedEvent.name} placeholder="Enter Name"></Input>
