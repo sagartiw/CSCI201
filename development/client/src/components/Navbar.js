@@ -14,7 +14,6 @@ export const NavbarPanel = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     useEffect(() => {
-        console.log("HELLO ITS CAROL");
         const loggedin = localStorage.getItem('username')
         console.log("username is " + localStorage.getItem('username'));
         if (loggedin != null) {
