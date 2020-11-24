@@ -9,22 +9,24 @@ import {
     Button
 } from 'reactstrap';
 import {NavbarPanel} from "../components/Navbar";
+import axios from "axios";
 
 export const DetailEvent = (props) => {
     const [selectedEvent, setSelectedEvent] = useState({
-        id: '',
         name: ''
     });
     const{ events, editEvent } = useContext(GlobalContext);
     const history = useHistory();
-    const currentEventId = props.match.params.id;
+    const currentEventName = props.match.params.name;
 
     useEffect(() => {
         let url = "http://localhost:4000/getEvent";
-        // const eventId = currentEventId;
-        // const selectedEvent = events.find(event => event.id === Number(eventId))
-        // setSelectedEvent(selectedEvent)
-    }, [currentEventId, events])
+        axios.get(url)
+            .then(function (response) {
+                console.log(response.data);
+                setSelectedEvent(response.data);
+            })
+    }, [currentEventName, events])
 
 
     return(
