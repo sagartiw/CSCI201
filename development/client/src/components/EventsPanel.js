@@ -24,6 +24,7 @@ export const EventsPanel = () => {
     }, [])
 
     return(
+
         <ListGroup className="mt-4">
             {allEvents.length > 0 ? (
                 <>

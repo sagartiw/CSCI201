@@ -30,20 +30,18 @@ export const NavbarPanel = () => {
                <NavbarBrand href={"/"}>StuOrgCentral</NavbarBrand>
                <Nav>
                    {isLoggedIn == true &&
-                   <NavItem>
-                       <Link className="btn btn-primary mr-1" to={"/AddEvent"}>Add Event</Link>
-                   </NavItem>
+                       <NavItem>
+                           <Link className="btn btn-primary mr-1" to={"/AddEvent"}>Add Event</Link>
+                       </NavItem>
                    }
                    {isLoggedIn == true &&
-                   <NavItem>
-                       <Link className="btn btn-primary mr-1" to={`/Profile`}>My Profile</Link>
-                   </NavItem>
+                       <NavItem>
+                           <Link className="btn btn-primary mr-1" to={`/Profile`}>My Profile</Link>
+                       </NavItem>
                    }
-
                    <NavItem>
                        <Link className="btn btn-primary" to={`/Login`}>Login</Link>
                    </NavItem>
-
                </Nav>
            </Container>
        </Navbar>
