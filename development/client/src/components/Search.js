@@ -5,7 +5,7 @@ import axios from 'axios';
 import {
     ListGroup,
     ListGroupItem,
-    Button, FormGroup, Label, Input, Form
+    Button, FormGroup, Label, Input, Form, Container
 } from "reactstrap";
 
 export const SearchPanel = () =>{
@@ -31,17 +31,8 @@ export const SearchPanel = () =>{
     return (
         <>
             <div>
-                <Form style={{maxWidth: "30rem", padding:"1rem"}}>
-                    <FormGroup>
-                        <Label>Search</Label>
-                        <Input onChange={(e) => setSearchQuery(e.target.value)} value={searchQuery} type="text" placeholder="Enter Search Term"></Input>
-                    </FormGroup>
-                    <Button onClick={loadEvents}>Enter</Button>
-                </Form>
-            </div>
-
-            <div className="md-form active-cyan active-cyan-2 mb-3">
-                <input className="form-control" type="text" placeholder="Search" aria-label="Search"></input>
+                <Input onChange={(e) => setSearchQuery(e.target.value)} value={searchQuery} type="text" placeholder="Search by Keyword (lowercase only)"></Input>
+                <Button color="success" size="lg" block onClick={loadEvents}>Search</Button>
             </div>
 
             <ListGroup className="mt-4">
@@ -59,9 +50,11 @@ export const SearchPanel = () =>{
                         ))}
                     </>
                 ) : (
-                    <h4 className="text-center">No Events</h4>
+                    <h4 className="text-center">No Filtered Events</h4>
                 )}
             </ListGroup>
+            <hr></hr>
+
         </>
     )
 }
