@@ -40,6 +40,10 @@ export const SearchPanel = () =>{
                 </Form>
             </div>
 
+            <div className="md-form active-cyan active-cyan-2 mb-3">
+                <input className="form-control" type="text" placeholder="Search" aria-label="Search"></input>
+            </div>
+
             <ListGroup className="mt-4">
                 {searchResults.length > 0 ? (
                     <>
