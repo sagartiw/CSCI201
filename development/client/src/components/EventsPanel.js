@@ -8,8 +8,6 @@ import {
     Button
 } from "reactstrap";
 
-
-
 export const EventsPanel = () => {
     const{ events, removeEvent } = useContext(GlobalContext);
     const [allEvents, setEvents] = useState('');
@@ -24,7 +22,6 @@ export const EventsPanel = () => {
     }, [])
 
     return(
-
         <ListGroup className="mt-4">
             {allEvents.length > 0 ? (
                 <>
