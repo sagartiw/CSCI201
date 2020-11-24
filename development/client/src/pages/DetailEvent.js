@@ -6,39 +6,55 @@ import {
     FormGroup,
     Label,
     Input,
-    Button
+    Button, ListGroupItem, ListGroup
 } from 'reactstrap';
 import {NavbarPanel} from "../components/Navbar";
 import axios from "axios";
 
 export const DetailEvent = (props) => {
-    const [selectedEvent, setSelectedEvent] = useState({
-        name: ''
-    });
-    const{ events, editEvent } = useContext(GlobalContext);
-    const history = useHistory();
+    // const{ events, editEvent } = useContext(GlobalContext);
+    const [selectedEvent, setSelectedEvent] = useState('');
+    // const history = useHistory();
     const currentEventName = props.match.params.name;
 
     useEffect(() => {
-        let url = "http://localhost:4000/getEvent";
+        let url = "http://localhost:4000/getEvent?name=" + currentEventName;
         axios.get(url)
             .then(function (response) {
+                console.log("PRINTING")
                 console.log(response.data);
                 setSelectedEvent(response.data);
             })
-    }, [currentEventName, events])
+    }, [])
 
 
     return(
         <div>
             <NavbarPanel/>
-            <Form style={{maxWidth: "30rem", padding:"1rem"}}>
-                <FormGroup>
-                    <Label>Name</Label>
-                    <Input type="text" name="name" value={selectedEvent.name} placeholder="Enter Name"></Input>
-                </FormGroup>
-                <Link to="/" className="btn btn-danger ml-2">Cancel</Link>
-            </Form>
+
+            <ListGroup className="mt-4">
+                {selectedEvent.length > 0 ? (
+                    <>
+                        {selectedEvent.map((selectedEvent) => (
+                            <ListGroupItem className="d-flex">
+                                <strong>Name - {selectedEvent.name}</strong>
+                            </ListGroupItem>
+                        ))}
+                        {selectedEvent.map((selectedEvent) => (
+                            <ListGroupItem className="d-flex">
+                                <strong>Organization - {selectedEvent.organization}</strong>
+                            </ListGroupItem>
+                        ))}
+                        {selectedEvent.map((selectedEvent) => (
+                            <ListGroupItem className="d-flex">
+                                <strong>Description - {selectedEvent.description}</strong>
+                            </ListGroupItem>
+                        ))}
+                    </>
+                ) : (
+                    <h4 className="text-center">No Events</h4>
+                )}
+            </ListGroup>
         </div>
     )
 }
