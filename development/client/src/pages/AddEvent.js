@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import { GlobalContext } from "../context/GlobalState";
 import { Link, useHistory } from 'react-router-dom';
 import { v4 as uuid } from 'uuid';
@@ -10,24 +10,34 @@ import {
     Button
 } from 'reactstrap';
 import { NavbarPanel } from "../components/Navbar";
+import axios from "axios";
+//import { DateTimePicker } from '@progress/kendo-react-dateinputs';
 
 export const AddEvent = () => {
     const [name, setName] = useState('');
     const [organization, setOrganization] = useState('');
     const [time, setTime] = useState('');
     const [desc, setDescription] = useState('');
-    const{ addEvent } = useContext(GlobalContext);
+    //const{ addEvent } = useContext(GlobalContext);
     const history = useHistory();
 
     const onSubmit = () => {
-        const newEvent = {
-            id: uuid,
-            name: name,
+        let url = "http://localhost:4000/addEvent";
+        axios.post(url, {
             organization: organization,
-            time: time,
+            time: new Date(time),
+            name: name,
+            keywords: name,
             description: desc
-        }
-        addEvent(newEvent);
+        })
+        .then(function (response) {
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+
+        //addEvent(newEvent);
         history.push("/");
     }
 
