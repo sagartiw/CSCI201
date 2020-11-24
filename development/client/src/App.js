@@ -18,12 +18,12 @@ function App() {
                   <Switch>
                       <Route path ='/Login' component={Login} />
                       <Route path ='/AddEvent' component={AddEvent} />
-                      <Route path ='/EditEvent/:id' component={EditEvent}/>
+                      <Route path ='/EditEvent/:name' component={EditEvent}/>
                       <Route path ='/' exact component={Home} />
                       <Route path ='/Home' component={Home} />
                       <Route path ='/Profile' component={Profile} />
                       <Route path ='/EditProfile' component={EditProfile} />
-                      <Route path ='/DetailEvent/:id' component={DetailEvent}/>
+                      <Route path ='/DetailEvent/:name' component={DetailEvent}/>
                   </Switch>
               </Router>
           </GlobalProvider>
