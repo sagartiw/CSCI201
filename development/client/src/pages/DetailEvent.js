@@ -20,9 +20,10 @@ export const DetailEvent = (props) => {
     const currentEventId = props.match.params.id;
 
     useEffect(() => {
-        const eventId = currentEventId;
-        const selectedEvent = events.find(event => event.id === Number(eventId))
-        setSelectedEvent(selectedEvent)
+        let url = "http://localhost:4000/getEvent";
+        // const eventId = currentEventId;
+        // const selectedEvent = events.find(event => event.id === Number(eventId))
+        // setSelectedEvent(selectedEvent)
     }, [currentEventId, events])
 
 
