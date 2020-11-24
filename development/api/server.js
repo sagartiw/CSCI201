@@ -209,6 +209,22 @@ mongo.connect(function (err) {
     }
 });
 
+    // get event
+    app.get('/getEvent', (request, response) => {
+        console.log("request params: " +  request.query.name);
+
+        db.collection('Events').find({
+            name: request.query.name
+        })
+            .toArray()
+            .then((result) => {
+                response.status(200).json(result)
+            })
+            .catch((error) => {
+                response.status(400).send(error.message);
+            })
+    });
+
     // ---------------------------------------------------------------------
     // ---------------------------- Org Queries ----------------------------
     // ---------------------------------------------------------------------
