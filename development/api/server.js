@@ -154,7 +154,6 @@ mongo.connect(function (err) {
             console.log('Editing Event');
 
             var editedEvent = {
-                id: request.body.id,
                 organization: request.body.organization,
                 time: request.body.time,
                 name: request.body.name,
@@ -162,7 +161,7 @@ mongo.connect(function (err) {
                 description: request.body.description
             }
             await db.collection('Events').updateOne(
-                { id: request.body.id },
+                { name: request.body.name },
                 {
                     $set: editedEvent,
                     $currentDate: { lastModified: true }
