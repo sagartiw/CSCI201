@@ -10,6 +10,7 @@ export const Home = () => {
         <div>
             <NavbarPanel/>
             <SearchPanel/>
+            <h1>THIS IS THE DIVIDER</h1>
             <EventsPanel/>
         </div>
     );
