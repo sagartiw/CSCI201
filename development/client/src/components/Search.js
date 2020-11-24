@@ -53,7 +53,7 @@ export const SearchPanel = () =>{
                     <h4 className="text-center">No Filtered Events</h4>
                 )}
             </ListGroup>
-
+            <hr></hr>
 
         </>
     )
