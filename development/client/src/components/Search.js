@@ -10,10 +10,21 @@ import {
 
 export const SearchPanel = () =>{
     const{events, removeEvent} = useContext(GlobalContext);
-    const []
+    const [searchResults, setSearch] = useState('');
 
     useEffect( () => {
         let url = "http://localhost:4000/lookupEventsByKeywords";
         axios.post(url, {params: {keywords: userInput}})
     })
+
+    axios.post('/user', {
+        firstName: 'Fred',
+        lastName: 'Flintstone'
+    })
+        .then(function (response) {
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
 }
