@@ -21,7 +21,6 @@ export const DetailEvent = (props) => {
         let url = "http://localhost:4000/getEvent?name=" + currentEventName;
         axios.get(url)
             .then(function (response) {
-                console.log("PRINTING")
                 console.log(response.data);
                 setSelectedEvent(response.data);
             })
