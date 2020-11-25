@@ -36,8 +36,9 @@ export const AddEvent = () => {
         .catch(function (error) {
             console.log(error);
         });
-
+        history.go(0);
         history.push("/");
+        window.location.replace("http://localhost:3000");
     }
 
     const nameChange = (e) =>{

@@ -1,7 +1,6 @@
 import React, {useState, useContext, useEffect} from 'react';
 import { GlobalContext } from "../context/GlobalState";
 import { Link, useHistory } from 'react-router-dom';
-import { v4 as uuid } from 'uuid';
 import {
     Form,
     FormGroup,
@@ -62,6 +61,7 @@ export const EditProfile = (props) => {
             .catch(function (error) {
                 console.log(error);
             });
+        history.go(0);
         console.log("FINISHED SUBMITTING")
         history.push("/");
     }

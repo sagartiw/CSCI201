@@ -13,9 +13,9 @@ import axios from "axios";
 
 export const EditEvent = (props) => {
     const [name, setName] = useState('');
-    const [organization, setOrganization] = useState('');
-    const [time, setTime] = useState('');
-    const [desc, setDescription] = useState('');
+    let [organization, setOrganization] = useState('');
+    let [time, setTime] = useState('');
+    let [desc, setDescription] = useState('');
     const [selectedEvent, setSelectedEvent] = useState('');
     const{ events, editEvent } = useContext(GlobalContext);
     const history = useHistory();
@@ -48,6 +48,15 @@ export const EditEvent = (props) => {
 
     //Somehow adds a new event instead of properly editing.
     const onSubmit = () => {
+        if(organization.length == 0) {
+            organization = selectedEvent.organization;
+        }
+        if(time.length == 0) {
+            time = selectedEvent.time;
+        }
+        if(desc.length == 0) {
+            desc = selectedEvent.description;
+        }
         let url = "http://localhost:4000/editEvent"
                     + "?name=" + currentEventName
                     + "&organization=" + organization
@@ -60,6 +69,7 @@ export const EditEvent = (props) => {
             .catch(function (error) {
                 console.log(error);
             });
+        history.go(0);
         history.push("/");
     }
 
