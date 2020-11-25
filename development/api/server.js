@@ -118,7 +118,7 @@ mongo.connect(function (err) {
                     organization: request.body.organization,
                     time: request.body.time,
                     name: request.body.name,
-                    keywords: request.body.keywords,
+                    keywords: [],
                     description: request.body.description,
                     created: new Date(Date.now()).toISOString()
                 };
@@ -132,6 +132,15 @@ mongo.connect(function (err) {
                     response.status(200).json('Successfully added event!');
                 }
             })
+            await db.collection('Events').updateOne(
+                { name : request.body.name },
+                {
+                    $push : {
+                        keywords : request.body.keywords
+                    }
+                },
+                (err, result) => {
+                })
         }
     });
 
@@ -223,6 +232,42 @@ mongo.connect(function (err) {
             .catch((error) => {
                 response.status(400).send(error.message);
             })
+    });
+
+    // add keyword to event
+    app.post('/addKeyword', async (request, response) => {
+        let exists = false;
+        // Check if the user exists
+        await db.collection('Events').find({
+            name : request.query.name
+        }).toArray()
+            .then((result) => {
+                if (result.length > 0) {
+                    exists = true;
+                }
+                else {
+                    response.status(400).json("Event does not exist!")
+                }
+            })
+
+        if (exists) { // Only if Event exists. add keyword
+            console.log('Adding Keyword to Event');
+
+            await db.collection('Events').updateOne(
+                { name : request.query.name },
+                {
+                    $push : {
+                        keywords : request.query.keyword
+                    }
+                },
+                (err, result) => {
+                    if (err) {
+                        response.status(400).json('Failed to add Keyword to Event');
+                    } else {
+                        response.status(200).json('Successfully added Keyword to Event!');
+                    }
+                })
+        }
     });
 
     // ---------------------------------------------------------------------
@@ -977,8 +1022,9 @@ mongo.connect(function (err) {
         })
             .toArray()
             .then((result) => {
-                console.log("Printing: " + JSON.stringify(result));
-
+                console.log(JSON.stringify(result));
+                console.log(typeof result);
+                console.log("Result should be printed");
                 const client = stream.connect(
                     'g3xp36f3dr8u',
                     'zb8k2ambvhu87y6hay6bn2bezk58dy3fpx2b3vqdjjcer26jed723nwkbabznj7b',
@@ -987,8 +1033,8 @@ mongo.connect(function (err) {
                 notificationFeed.addActivity({
                     actor: 'notifications',
                     verb: 'attend',
-                    object : result.toJSON().title,
-                    time: result.toJSON().date,
+                    object : result.title,
+                    time: 'something',
                     foreign_id: 'im not sure'
                 });
                 response.status(200).json(result)
@@ -1009,7 +1055,28 @@ mongo.connect(function (err) {
         await timeline.follow('user', 'notifications');
         const feed = await timeline.get();
         console.log(feed);
-        response.status(200).send(feed);
+
+        //Parses the feed object to get the titles and
+        //console.log("TESTING STUFF HERE:")
+        var titleArray = [];
+        var res = feed.results;
+        //console.log(res);
+        //console.log("Starting loops");
+        for(var i = 0; i < res.length; i++) {
+            try {
+                const objectList = JSON.parse(res[i].object);
+                console.log(res[i]);
+                for(var j = 0; j < objectList.length; j++) {
+                    const title = objectList[j].title;
+                    titleArray.push(title);
+                }
+            }
+            catch(err) {}
+
+        }
+        //console.log("Done parsing");
+        console.log(titleArray);
+        response.status(200).send(titleArray);
     });
 
 

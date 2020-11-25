@@ -36,9 +36,9 @@ export const AddEvent = () => {
         .catch(function (error) {
             console.log(error);
         });
-
-        //addEvent(newEvent);
+        history.go(0);
         history.push("/");
+        window.location.replace("http://localhost:3000");
     }
 
     const nameChange = (e) =>{
@@ -73,7 +73,7 @@ export const AddEvent = () => {
 
                 <FormGroup>
                     <Label>Time</Label>
-                    <Input type="text" value={time} onChange = {timeChange} placeholder="Enter Time"></Input>
+                    <Input type="text" value={time} onChange = {timeChange} placeholder="Enter Time as ISO String"></Input>
                 </FormGroup>
 
                 <FormGroup>

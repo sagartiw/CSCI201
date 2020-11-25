@@ -49,7 +49,16 @@ export const NavbarPanel = () => {
                        <Link className="btn btn-primary mr-1" onClick={onLogOut} to={`/LoggedOut`}>Log Out</Link>
                    </NavItem>
                    }
+<<<<<<< Updated upstream
                    {isLoggedIn == false &&
+=======
+                   {isLoggedIn == true &&
+                   <NavItem>
+                       <Link className="btn btn-primary mr-1" to={"/LoggedOut"}>Log Out</Link>
+                   </NavItem>
+                   }
+
+>>>>>>> Stashed changes
                    <NavItem>
                        <Link className="btn btn-primary" to={`/Login`}>Login</Link>
                    </NavItem>

@@ -2,6 +2,7 @@ import React, {useContext, useEffect, useState} from "react";
 import {GlobalContext} from "../context/GlobalState";
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { useHistory } from 'react-router'
 import {
     ListGroup,
     ListGroupItem,
@@ -11,6 +12,7 @@ import {
 export const EventsPanel = () => {
     const{ events, removeEvent } = useContext(GlobalContext);
     const [allEvents, setEvents] = useState('');
+    const history = useHistory()
 
     useEffect(() => {
         let url = "http://localhost:4000/allEvents";
@@ -32,6 +34,7 @@ export const EventsPanel = () => {
             .catch(function (error) {
                 console.log(error);
             });
+        history.go(0)
         console.log("FINISHED DELETING")
     }
 

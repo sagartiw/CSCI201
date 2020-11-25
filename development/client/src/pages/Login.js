@@ -23,7 +23,15 @@ export const Login = () => {
         let url = "http://localhost:4000/login";
 
 
+<<<<<<< Updated upstream
         const res = await axios.get(url, {params: {username: UserUsername, password: UserPassword}});
+=======
+        let url = "https://localhost:4000/login";
+        let url1 = "https://localhost:4000/addUser";
+
+        const res = await axios.get(url,{params: {username: 'JohnUsername', password: '123password'}});
+        const res1 = await axios.get(url1,{params: {username: 'JohnUsername', password: '123password'}});
+>>>>>>> Stashed changes
 
         if (res.status == 200)
         {
@@ -34,6 +42,24 @@ export const Login = () => {
             localStorage.setItem('username', null);
             window.location.reload(false);
         }
+<<<<<<< Updated upstream
+=======
+        if (res1.status == 200)
+        {
+            localStorage.setItem('username', username);
+        }
+        else {
+            localStorage.setItem('username', null)
+        }
+
+
+
+
+        const onChange = (e) =>{
+        setName(e.target.value);
+    }
+
+>>>>>>> Stashed changes
     }
 
     async function onRegister() {
