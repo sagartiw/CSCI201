@@ -648,6 +648,9 @@ mongo.connect(function (err) {
                     console.log('Username is taken');
                 }
             })
+            .catch((error) => {
+                response.status(400).send(error.message);
+            })
 
         if (!exists) { // only if the User does not exist, add it. (if it already exists, skip adding it)
             console.log('Adding User');
@@ -698,7 +701,9 @@ mongo.connect(function (err) {
                     $set: {
                         password: request.body.password,
                         firstName: request.body.firstName,
-                        lastName: request.body.lastName
+                        lastName: request.body.lastName,
+                        email: request.body.email,
+                        description: request.body.description
                     },
                     $currentDate: { lastModified: true }
                 },
