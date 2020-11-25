@@ -48,7 +48,6 @@ export const Profile = (props) => {
                         <NavbarPanel/>
 
                         <h1>Name: {userData.firstName + " " + userData.lastName}</h1>
-                        <p>Joined: </p>
                         <p>Email: {userData.email}</p>
                         <p>Description: {userData.description}</p>
                         <p>

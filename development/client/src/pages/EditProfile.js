@@ -14,11 +14,11 @@ import axios from "axios";
 
 export const EditProfile = (props) => {
     const [user, setUserData] = useState('');
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [password, setPassword] = useState('');
-    const [email, setEmail] = useState('');
-    const [description, setDescription] = useState('');
+    let [firstName, setFirstName] = useState('');
+    let [lastName, setLastName] = useState('');
+    let [password, setPassword] = useState('');
+    let [email, setEmail] = useState('');
+    let [description, setDescription] = useState('');
     const{ editProfile } = useContext(GlobalContext);
     const history = useHistory();
 
@@ -33,6 +33,21 @@ export const EditProfile = (props) => {
 
     const onSubmit = () => {
         let url = "http://localhost:4000/editUser";
+        if(firstName.length == 0) {
+            firstName = user.firstName;
+        }
+        if(lastName.length == 0) {
+            lastName = user.lastName;
+        }
+        if(password.length == 0) {
+            password = user.password;
+        }
+        if(email.length == 0) {
+            email = user.email;
+        }
+        if(description.length == 0) {
+            description = user.description;
+        }
         axios.post(url, {
             username: localStorage.getItem('username'),
             firstName: firstName,
@@ -80,21 +95,15 @@ export const EditProfile = (props) => {
             <h2>Edit Profile </h2>
             <p></p>
 
-            {/*<Input type="text" name="name" onChange={onChangeName} placeholder="Name"></Input>*/}
-            {/*<Input type="text" name="name" onChange={onChangeEmail} placeholder="Email"></Input>*/}
-            {/*<Input type="text" name="name" onChange={onChangeDescription} placeholder="Description"></Input>*/}
-            {/*<p>*/}
-            {/*</p>*/}
-            {/*<button className="btn btn-primary">Submit</button>*/}
             <Form onSubmit={onSubmit} style={{maxWidth: "30rem", padding:"1rem"}}>
                 <>
                     <FormGroup>
                         <Label>First Name</Label>
-                        <Input type="text" value={firstName} onChange={firstNameChange}></Input>
+                        <Input type="text" value={firstName} onChange={firstNameChange} placeholder={user.firstName}></Input>
                     </FormGroup>
                     <FormGroup>
                         <Label>Last Name</Label>
-                        <Input type="text" value={lastName} onChange={lastNameChange}></Input>
+                        <Input type="text" value={lastName} onChange={lastNameChange} placeholder={user.lastName}></Input>
                     </FormGroup>
                     <FormGroup>
                         <Label>Password</Label>
@@ -102,7 +111,7 @@ export const EditProfile = (props) => {
                     </FormGroup>
                     <FormGroup>
                         <Label>Email</Label>
-                        <Input type="text" name="Email" value={email} onChange={emailChange} placeholder={user.organization}></Input>
+                        <Input type="text" name="Email" value={email} onChange={emailChange} placeholder={user.email}></Input>
                     </FormGroup>
                     <FormGroup>
                         <Label>Description</Label>
