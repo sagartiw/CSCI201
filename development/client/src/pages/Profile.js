@@ -7,7 +7,7 @@ import {
     FormGroup,
     Label,
     Input,
-    Button
+    Button, Col, ListGroupItem, ListGroup
 } from 'reactstrap';
 import { NavbarPanel } from "../components/Navbar";
 import axios from "axios";
@@ -43,16 +43,26 @@ export const Profile = (props) => {
 
     return(
 
-                <div className="card">
+                <div>
+
 
                         <NavbarPanel/>
+                    <ListGroup className="mt-4">
+                        <ListGroupItem className="d-flex">
+                            <Col xs="6"><strong>Name</strong></Col>
+                            <Col xs="6">{userData.firstName + " " + userData.lastName}</Col>
+                        </ListGroupItem>
+                        <ListGroupItem className="d-flex">
+                            <Col xs="6"><strong>Email</strong></Col>
+                            <Col xs="6">{userData.email}</Col>
+                        </ListGroupItem>
+                        <ListGroupItem className="d-flex">
+                            <Col xs="6"><strong>Description</strong></Col>
+                            <Col xs="6">{userData.description}</Col>
+                        </ListGroupItem>
+                    </ListGroup>
 
-                        <h1>Name: {userData.firstName + " " + userData.lastName}</h1>
-                        <p>Email: {userData.email}</p>
-                        <p>Description: {userData.description}</p>
-                        <p>
-                        </p>
-                        <Link className="btn btn-primary" to={"/EditProfile"}>Edit Profile</Link>
+                    <Link className="btn btn-outline-primary mt-2" to={"/EditProfile"}>Edit Profile</Link>
                 </div>
 
     )

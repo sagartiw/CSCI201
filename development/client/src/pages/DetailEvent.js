@@ -6,7 +6,7 @@ import {
     FormGroup,
     Label,
     Input,
-    Button, ListGroupItem, ListGroup
+    Button, ListGroupItem, ListGroup, Col
 } from 'reactstrap';
 import {NavbarPanel} from "../components/Navbar";
 import axios from "axios";
@@ -30,23 +30,25 @@ export const DetailEvent = (props) => {
     return(
         <div>
             <NavbarPanel/>
-
             <ListGroup className="mt-4">
                 {selectedEvent.length > 0 ? (
                     <>
                         {selectedEvent.map((selectedEvent) => (
                             <ListGroupItem className="d-flex">
-                                <strong>Name - {selectedEvent.name}</strong>
+                                <Col xs="6"><strong>Name</strong></Col>
+                                <Col xs="6">{selectedEvent.name}</Col>
                             </ListGroupItem>
                         ))}
                         {selectedEvent.map((selectedEvent) => (
                             <ListGroupItem className="d-flex">
-                                <strong>Organization - {selectedEvent.organization}</strong>
+                                <Col xs="6"><strong>Organization</strong></Col>
+                                <Col xs="6">{selectedEvent.organization}</Col>
                             </ListGroupItem>
                         ))}
                         {selectedEvent.map((selectedEvent) => (
                             <ListGroupItem className="d-flex">
-                                <strong>Description - {selectedEvent.description}</strong>
+                                <Col xs="6"><strong>Description</strong></Col>
+                                <Col xs="6">{selectedEvent.description}</Col>
                             </ListGroupItem>
                         ))}
                     </>
@@ -54,6 +56,7 @@ export const DetailEvent = (props) => {
                     <h4 className="text-center">No Events</h4>
                 )}
             </ListGroup>
+            <Link to="/" className="btn btn-outline-primary mr-2 mt-2">Return Home</Link>
         </div>
     )
 }
