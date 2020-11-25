@@ -57,6 +57,10 @@ export const Login = () => {
         else{
             localStorage.setItem('username', null);
         }
+
+        const onChange = (e) =>{
+            setName(e.target.value);
+        }
     }
 
     return(
