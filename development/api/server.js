@@ -697,7 +697,9 @@ mongo.connect(function (err) {
                     $set: {
                         password: request.body.password,
                         firstName: request.body.firstName,
-                        lastName: request.body.lastName
+                        lastName: request.body.lastName,
+                        email: request.body.email,
+                        description: request.body.description
                     },
                     $currentDate: { lastModified: true }
                 },
