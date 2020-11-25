@@ -1,7 +1,5 @@
-import React, {useState, useContext, useEffect} from 'react';
-import { GlobalContext } from "../context/GlobalState";
+import React, {useState} from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import { v4 as uuid } from 'uuid';
 import {
     Form,
     FormGroup,
@@ -11,14 +9,12 @@ import {
 } from 'reactstrap';
 import { NavbarPanel } from "../components/Navbar";
 import axios from "axios";
-//import { DateTimePicker } from '@progress/kendo-react-dateinputs';
 
 export const AddEvent = () => {
     const [name, setName] = useState('');
     const [organization, setOrganization] = useState('');
     const [time, setTime] = useState('');
     const [desc, setDescription] = useState('');
-    //const{ addEvent } = useContext(GlobalContext);
     const history = useHistory();
 
     const onSubmit = () => {
@@ -84,7 +80,6 @@ export const AddEvent = () => {
                 <Button type="submit">Submit</Button>
                 <Link to="/" className="btn btn-danger ml-2">Cancel</Link>
             </Form>
-
         </>
     )
 }

@@ -1,5 +1,4 @@
-import React, {useState, useContext, useEffect} from 'react';
-import { GlobalContext } from "../context/GlobalState";
+import React, {useState, useEffect} from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import {
     Form,
@@ -18,7 +17,6 @@ export const EditProfile = (props) => {
     let [password, setPassword] = useState('');
     let [email, setEmail] = useState('');
     let [description, setDescription] = useState('');
-    const{ editProfile } = useContext(GlobalContext);
     const history = useHistory();
 
     useEffect(() => {
@@ -32,19 +30,19 @@ export const EditProfile = (props) => {
 
     const onSubmit = () => {
         let url = "http://localhost:4000/editUser";
-        if(firstName.length == 0) {
+        if(firstName.length === 0) {
             firstName = user.firstName;
         }
-        if(lastName.length == 0) {
+        if(lastName.length === 0) {
             lastName = user.lastName;
         }
-        if(password.length == 0) {
+        if(password.length === 0) {
             password = user.password;
         }
-        if(email.length == 0) {
+        if(email.length === 0) {
             email = user.email;
         }
-        if(description.length == 0) {
+        if(description.length === 0) {
             description = user.description;
         }
         axios.post(url, {

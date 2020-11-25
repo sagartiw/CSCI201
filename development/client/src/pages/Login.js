@@ -11,6 +11,7 @@ import {
     Button
 } from 'reactstrap';
 import { NavbarPanel } from "../components/Navbar";
+import Popup from 'react-popup';
 
 export const Login = () => {
 
@@ -24,7 +25,7 @@ export const Login = () => {
         let url = "http://localhost:4000/login";
 
 
-        const res = await axios.get(url,{params: {username: 'JohnUsername', password: '123password'}});
+        const res = await axios.get(url,{params: {username: UserUsername, password: UserPassword}});
 
 
         if (res.status == 200)
@@ -32,13 +33,16 @@ export const Login = () => {
             localStorage.setItem('username', UserUsername);
             window.location.replace("http://localhost:3000");
         }
-        else {
+        else if(res.status == 400){
             localStorage.setItem('username', null);
+            console.log("WE MADE IT HERE");
             window.location.reload(false);
         }
-
-
-
+        else {
+            localStorage.setItem('username', null);
+            console.log("WE MADE IT HERE");
+            window.location.reload(false);
+        }
     }
 
     async function onRegister() {
@@ -53,17 +57,19 @@ export const Login = () => {
         else if(res.status === 400){
             alert("Username already exists!");
             localStorage.setItem('username', null);
+            console.log("WE MADE IT HERE");
             window.location.reload(false);
         }
         else{
             localStorage.setItem('username', null);
+            console.log("WE MADE IT HERE");
             window.location.reload(false);
         }
     }
 
+
     return(
         <div>
-
             <NavbarPanel/>
 
             <h2>Sign-in or Register! </h2>

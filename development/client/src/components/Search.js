@@ -1,15 +1,15 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, {useContext, useState} from "react";
 import {GlobalContext} from "../context/GlobalState";
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import {
     ListGroup,
     ListGroupItem,
-    Button, FormGroup, Label, Input, Form, Container
+    Button, Input
 } from "reactstrap";
 
 export const SearchPanel = () =>{
-    const{events, removeEvent} = useContext(GlobalContext);
+    const{removeEvent} = useContext(GlobalContext);
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState('');
 

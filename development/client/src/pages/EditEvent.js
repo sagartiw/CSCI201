@@ -148,7 +148,7 @@ export const EditEvent = (props) => {
                 ) : (
                 <h4 className="text-center">Error finding event :(</h4>
                 )}
-
+            <Link to="/" className="btn btn-outline-primary ml-2 mt-2">Return Home</Link>
         </div>
     )
 }

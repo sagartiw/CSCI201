@@ -1,7 +1,6 @@
-import axios from 'axios';
 import React, {useState, useContext} from 'react';
 import { GlobalContext } from "../context/GlobalState";
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 
 import { NavbarPanel } from "../components/Navbar";
@@ -23,15 +22,9 @@ export const LoggedOut = () => {
 
 
     return(
-
         <div>
-
             <NavbarPanel/>
-
-            <h2>Loggged out! Thanks! </h2>
-
-
+            <h2 className={"mt-2"}>Loggged out! Thanks! </h2>
         </div>
-
     )
 }

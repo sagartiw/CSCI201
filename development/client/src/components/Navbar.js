@@ -34,24 +34,23 @@ export const NavbarPanel = () => {
            <Container>
                <NavbarBrand href={"/"}>StuOrgCentral</NavbarBrand>
                <Nav>
-                   {isLoggedIn == true &&
+                   {isLoggedIn === true &&
                        <NavItem>
                            <Link className="btn btn-primary mr-1" to={"/AddEvent"}>Add Event</Link>
                        </NavItem>
                    }
-                   {isLoggedIn == true &&
+                   {isLoggedIn === true &&
                        <NavItem>
                            <Link className="btn btn-primary mr-1" to={`/Profile`}>My Profile</Link>
                        </NavItem>
                    }
-                   {isLoggedIn == true &&
+                   {isLoggedIn === true &&
                    <NavItem>
                        <Link className="btn btn-primary mr-1" onClick={onLogOut} to={`/LoggedOut`}>Log Out</Link>
                    </NavItem>
                    }
 
-
-                   {isLoggedIn == false &&
+                   {isLoggedIn === false &&
                    <NavItem>
                        <Link className="btn btn-primary" to={`/Login`}>Login</Link>
                    </NavItem>

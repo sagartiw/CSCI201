@@ -1,20 +1,13 @@
-import React, {useState, useContext, useEffect} from 'react';
-import { GlobalContext } from "../context/GlobalState";
-import { Link, useHistory } from 'react-router-dom';
+import React, {useState, useEffect} from 'react';
+import { Link} from 'react-router-dom';
 import {
-    Form,
-    FormGroup,
-    Label,
-    Input,
-    Button, ListGroupItem, ListGroup, Col
+    ListGroupItem, ListGroup, Col
 } from 'reactstrap';
 import {NavbarPanel} from "../components/Navbar";
 import axios from "axios";
 
 export const DetailEvent = (props) => {
-    // const{ events, editEvent } = useContext(GlobalContext);
     const [selectedEvent, setSelectedEvent] = useState('');
-    // const history = useHistory();
     const currentEventName = props.match.params.name;
 
     useEffect(() => {
@@ -24,7 +17,7 @@ export const DetailEvent = (props) => {
                 console.log(response.data);
                 setSelectedEvent(response.data);
             })
-    }, [])
+    }, [currentEventName])
 
 
     return(

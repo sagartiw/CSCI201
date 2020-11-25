@@ -1,5 +1,4 @@
-import React, {useContext, useEffect, useState} from "react";
-import {GlobalContext} from "../context/GlobalState";
+import React, {useEffect, useState} from "react";
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useHistory } from 'react-router'
@@ -10,7 +9,6 @@ import {
 } from "reactstrap";
 
 export const EventsPanel = () => {
-    const{ events, removeEvent } = useContext(GlobalContext);
     const [allEvents, setEvents] = useState('');
     const history = useHistory()
 
@@ -48,7 +46,6 @@ export const EventsPanel = () => {
                             <div className="ml-auto">
                                 <Link to={`/DetailEvent/${allEvents.name}`} color="success" className="btn btn-success mr-1">Details</Link>
                                 <Link to={`/EditEvent/${allEvents.name}`} color="warning" className="btn btn-warning mr-1">Edit</Link>
-                                {/*<Button onClick={() => removeEvent(allEvents.name)} color="danger">Delete</Button>*/}
                                 <Button onClick={() => onDelete(allEvents.name)} color="danger">Delete</Button>
                             </div>
                         </ListGroupItem>
