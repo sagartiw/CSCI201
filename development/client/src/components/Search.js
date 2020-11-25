@@ -54,7 +54,6 @@ export const SearchPanel = () =>{
                 )}
             </ListGroup>
             <hr></hr>
-
         </>
     )
 }

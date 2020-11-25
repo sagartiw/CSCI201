@@ -23,7 +23,6 @@ export const Login = () => {
     const [loginSuccess, setLoginSuccess] = useState(false);
 
     async function onSubmit(){
-
         let url = "http://localhost:4000/login";
 
         const res = await axios.get(url, {params: {username: UserUsername, password: UserPassword}});
@@ -34,39 +33,55 @@ export const Login = () => {
             window.location.reload(false);
         }
         else {
-            localStorage.setItem('username', null)
+            localStorage.setItem('username', null);
         }
 
         const onChange = (e) =>{
-        setName(e.target.value);
+            setName(e.target.value);
+        }
     }
 
+    async function onRegister() {
+        let url = "http://localhost:4000/addUser";
+
+        const res = await axios.post(url, {params: {username: UserUsername, password: UserPassword}});
+
+        if(res.status === 200){
+            localStorage.setItem('username', UserUsername);
+            window.location.reload(false);
+        }
+        else if(res.status === 400){
+            alert("Username already exists!");
+            localStorage.setItem('username', null);
+        }
+        else{
+            localStorage.setItem('username', null);
+        }
     }
 
     return(
+        <div>
 
-    <div>
+            <NavbarPanel/>
 
-        <NavbarPanel/>
+            <h2>Sign-in or Register! </h2>
+            <p></p>
+            <p>Login: </p>
+            <Input type="text" name="name" onChange={e => setUsername(e.target.value)} placeholder="Username"></Input>
+            <Input type="text" name="name" onChange={e => setPassword(e.target.value)} placeholder="Password"></Input>
+            <p>
+            </p>
+            <button className="btn btn-primary" onClick={onSubmit}>Sign-in</button>
 
-        <h2>Sign-in or Register! </h2>
-        <p></p>
-        <p>Login: </p>
-        <Input type="text" name="name" onChange={e => setUsername(e.target.value)} placeholder="Username"></Input>
-        <Input type="text" name="name" onChange={e => setPassword(e.target.value)} placeholder="Password"></Input>
-        <p>
-        </p>
-        <button className="btn btn-primary" onClick={onSubmit}>Sign-in</button>
-
-        <br></br>
-        <br></br>
-        <p>Register: </p>
-        <Input type="text" name="name" onChange={e => setUsername(e.target.value)} placeholder="Username"></Input>
-        <Input type="text" name="name" onChange={e => setPassword(e.target.value)} placeholder="Password"></Input>
-        <p>
-        </p>
-        <button className="btn btn-primary">Register</button>
-    </div>
+            <br></br>
+            <br></br>
+            <p>Register: </p>
+            <Input type="text" name="name" onChange={e => setUsername(e.target.value)} placeholder="Username"></Input>
+            <Input type="text" name="name" onChange={e => setPassword(e.target.value)} placeholder="Password"></Input>
+            <p>
+            </p>
+            <button className="btn btn-primary" onClick={onRegister}>Register</button>
+        </div>
 
     )
 }
