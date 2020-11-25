@@ -132,15 +132,6 @@ mongo.connect(function (err) {
                     response.status(200).json('Successfully added event!');
                 }
             })
-            // await db.collection('Events').updateOne(
-            //     { name : request.body.name },
-            //     {
-            //         $push : {
-            //             keywords : request.body.keywords
-            //         }
-            //     },
-            //     (err, result) => {
-            //     })
         }
     });
 
