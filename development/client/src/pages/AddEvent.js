@@ -37,7 +37,6 @@ export const AddEvent = () => {
             console.log(error);
         });
 
-        //addEvent(newEvent);
         history.push("/");
     }
 
@@ -73,7 +72,7 @@ export const AddEvent = () => {
 
                 <FormGroup>
                     <Label>Time</Label>
-                    <Input type="text" value={time} onChange = {timeChange} placeholder="Enter Time"></Input>
+                    <Input type="text" value={time} onChange = {timeChange} placeholder="Enter Time as ISO String"></Input>
                 </FormGroup>
 
                 <FormGroup>

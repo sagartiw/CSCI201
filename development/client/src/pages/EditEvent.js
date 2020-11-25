@@ -48,14 +48,13 @@ export const EditEvent = (props) => {
 
     //Somehow adds a new event instead of properly editing.
     const onSubmit = () => {
-        let url = "http://localhost:4000/editEvent";
-        axios.post(url, {
-            organization: organization,
-            time: new Date(time).toISOString(),
-            name: selectedEvent.name,
-            keywords: name,
-            description: desc
-        })
+        let url = "http://localhost:4000/editEvent"
+                    + "?name=" + selectedEvent.name
+                    + "&organization=" + organization
+                    + "&time=" + new Date(time).toISOString()
+                    + "&description=" + desc;
+        console.log("This is the axios call: " + url);
+        axios.post(url)
             .then(function (response) {
                 console.log(response);
             })

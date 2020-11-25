@@ -972,8 +972,9 @@ mongo.connect(function (err) {
         })
             .toArray()
             .then((result) => {
-                console.log("Printing: " + JSON.stringify(result));
-
+                console.log(JSON.stringify(result));
+                console.log(typeof result);
+                console.log("Result should be printed");
                 const client = stream.connect(
                     'g3xp36f3dr8u',
                     'zb8k2ambvhu87y6hay6bn2bezk58dy3fpx2b3vqdjjcer26jed723nwkbabznj7b',
@@ -982,8 +983,8 @@ mongo.connect(function (err) {
                 notificationFeed.addActivity({
                     actor: 'notifications',
                     verb: 'attend',
-                    object : result.toJSON().title,
-                    time: result.toJSON().date,
+                    object : result[0].title,
+                    time: 'something',
                     foreign_id: 'im not sure'
                 });
                 response.status(200).json(result)
