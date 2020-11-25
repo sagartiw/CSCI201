@@ -30,9 +30,9 @@ export const EditEvent = (props) => {
         })
     }, [currentEventName, events])
 
-    // const nameChange = (e) =>{
-    //     setName(e.target.value);
-    // }
+    const nameChange = (e) =>{
+        setName(e.target.value);
+    }
 
     const organizationChange = (e) =>{
         setOrganization(e.target.value);
@@ -49,11 +49,10 @@ export const EditEvent = (props) => {
     //Somehow adds a new event instead of properly editing.
     const onSubmit = () => {
         let url = "http://localhost:4000/editEvent"
-                    + "?name=" + selectedEvent.name
+                    + "?name=" + currentEventName
                     + "&organization=" + organization
                     + "&time=" + new Date(time).toISOString()
                     + "&description=" + desc;
-        console.log("This is the axios call: " + url);
         axios.post(url)
             .then(function (response) {
                 console.log(response);
@@ -61,7 +60,6 @@ export const EditEvent = (props) => {
             .catch(function (error) {
                 console.log(error);
             });
-        console.log("FINISHED SUBMITTING")
         history.push("/");
     }
 
@@ -74,7 +72,7 @@ export const EditEvent = (props) => {
                             {selectedEvent.map((selectedEvent) => (
                                 <FormGroup>
                                     <Label>Name</Label>
-                                    <Input type="text" value={selectedEvent.name}></Input>
+                                    <Input type="text" value={selectedEvent.name} onChange={nameChange}></Input>
                                 </FormGroup>
                             ))}
                             {selectedEvent.map((selectedEvent) => (
