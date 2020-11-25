@@ -32,6 +32,7 @@ export const EditProfile = (props) => {
     },[])
 
     const onSubmit = () => {
+<<<<<<< HEAD
         let url = "http://localhost:4000/editUser";
         axios.post(url, {
             username: localStorage.getItem('username'),
@@ -49,6 +50,11 @@ export const EditProfile = (props) => {
             });
         console.log("FINISHED SUBMITTING")
         history.push("/");
+=======
+        let url: "http://localhost:4000/editUser";
+
+
+>>>>>>> e661ea3b4ca2e43a7bb7d08248db87f3e76d88f6
     }
 
     const firstNameChange = (e) =>{
@@ -80,6 +86,7 @@ export const EditProfile = (props) => {
                     <h2>Edit Profile </h2>
                     <p></p>
 
+<<<<<<< HEAD
                     {/*<Input type="text" name="name" onChange={onChangeName} placeholder="Name"></Input>*/}
                     {/*<Input type="text" name="name" onChange={onChangeEmail} placeholder="Email"></Input>*/}
                     {/*<Input type="text" name="name" onChange={onChangeDescription} placeholder="Description"></Input>*/}
@@ -113,6 +120,14 @@ export const EditProfile = (props) => {
                                 <Link to="/" className="btn btn-danger ml-2">Cancel</Link>
                             </>
                     </Form>
+=======
+                    <Input type="text" name="name" onChange={onChange} placeholder="Name"></Input>
+                    <Input type="text" name="name" onChange={onChange} placeholder="Email"></Input>
+                    <Input type="text" name="name" onChange={onChange} placeholder="Description"></Input>
+                    <p>
+                    </p>
+                    <button className="btn btn-primary" onClick={onSubmit}>Submit</button>
+>>>>>>> e661ea3b4ca2e43a7bb7d08248db87f3e76d88f6
                 </div>
 
     )
