@@ -137,8 +137,9 @@ mongo.connect(function (err) {
 
     app.post('/editEvent', async (request, response) => {
         let exists = false;
+        let n = request.query.name;
         await db.collection('Events').find({
-            id : request.body.id
+            name : n
         }).toArray()
             .then((result) => {
                 // if there's an event with that title already, then edit
@@ -154,23 +155,23 @@ mongo.connect(function (err) {
             console.log('Editing Event');
 
             var editedEvent = {
-                organization: request.body.organization,
-                time: request.body.time,
-                name: request.body.name,
-                keywords: request.body.keywords,
-                description: request.body.description
+                organization: request.query.organization,
+                time: request.query.time,
+                name: n,
+                keywords: n,
+                description: request.query.description
             }
             await db.collection('Events').updateOne(
-                { name: request.body.name },
+                { name: request.query.name },
                 {
                     $set: editedEvent,
                     $currentDate: { lastModified: true }
                 },
                 (err, result) => {
                     if (err) {
-                        response.status(400).json('Failed to edit event');
+                        response.status(400).json('Failed to edit event' + n + ' :)');
                     } else {
-                        response.status(200).json('Successfully edited Event!');
+                        response.status(200).json('Successfully edited Event! ' +n + ' :)');
                     }
                 })
         }
@@ -943,7 +944,7 @@ mongo.connect(function (err) {
             })
 
         if (exists) {
-            await db.collection('Notifications').deleteOne({title: title}, (err, result) => {
+            await db.collection('Notifications').deleteOne({title : title}, (err, result) => {
                 if (err) {
                     //console.log('Failed to delete User: ' + err);
                     response.status(400).json('Failed to delete Notification');
@@ -981,8 +982,8 @@ mongo.connect(function (err) {
                 notificationFeed.addActivity({
                     actor: 'notifications',
                     verb: 'attend',
-                    object : item.title,
-                    time: item.date,
+                    object : result.toJSON().title,
+                    time: result.toJSON().date,
                     foreign_id: 'im not sure'
                 });
                 response.status(200).json(result)
@@ -998,7 +999,7 @@ mongo.connect(function (err) {
             'g3xp36f3dr8u',
             'zb8k2ambvhu87y6hay6bn2bezk58dy3fpx2b3vqdjjcer26jed723nwkbabznj7b',
         );
-        //TODO: resolve undefined username from cookies!
+
         let timeline = client.feed('timeline', 'notifications');
         await timeline.follow('user', 'notifications');
         const feed = await timeline.get();
