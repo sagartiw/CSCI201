@@ -988,7 +988,7 @@ mongo.connect(function (err) {
                 notificationFeed.addActivity({
                     actor: 'notifications',
                     verb: 'attend',
-                    object : result[0].title,
+                    object : result.title,
                     time: 'something',
                     foreign_id: 'im not sure'
                 });
@@ -1010,7 +1010,28 @@ mongo.connect(function (err) {
         await timeline.follow('user', 'notifications');
         const feed = await timeline.get();
         console.log(feed);
-        response.status(200).send(feed);
+
+        //Parses the feed object to get the titles and
+        //console.log("TESTING STUFF HERE:")
+        var titleArray = [];
+        var res = feed.results;
+        //console.log(res);
+        //console.log("Starting loops");
+        for(var i = 0; i < res.length; i++) {
+            try {
+                const objectList = JSON.parse(res[i].object);
+                console.log(res[i]);
+                for(var j = 0; j < objectList.length; j++) {
+                    const title = objectList[j].title;
+                    titleArray.push(title);
+                }
+            }
+            catch(err) {}
+
+        }
+        //console.log("Done parsing");
+        console.log(titleArray);
+        response.status(200).send(titleArray);
     });
 
 
