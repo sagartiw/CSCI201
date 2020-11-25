@@ -3,11 +3,14 @@ import React, {useState, useContext} from 'react';
 import { GlobalContext } from "../context/GlobalState";
 import { Link, useHistory } from 'react-router-dom';
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
 import { NavbarPanel } from "../components/Navbar";
 
 export const LoggedOut = () => {
 =======
+=======
+>>>>>>> Stashed changes
 import { v4 as uuid } from 'uuid';
 import {
     Form,
@@ -22,14 +25,22 @@ import { NavbarPanel } from "../components/Navbar";
 
 
 export const Login = () => {
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     const [name, setName] = useState('');
     const{ login } = useContext(GlobalContext);
     const history = useHistory();
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     const [UserUsername, setUsername] = useState("");
     const [UserPassword, setPassword] = useState("");
+=======
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+>>>>>>> Stashed changes
 =======
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -39,6 +50,10 @@ export const Login = () => {
 
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 =======
 
 >>>>>>> Stashed changes
@@ -49,8 +64,12 @@ export const Login = () => {
             <NavbarPanel/>
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             <h2>Loggged out! Thanks! </h2>
 
+=======
+            <h1>You are logged out. Thanks for coming!</h1>
+>>>>>>> Stashed changes
 =======
             <h1>You are logged out. Thanks for coming!</h1>
 >>>>>>> Stashed changes

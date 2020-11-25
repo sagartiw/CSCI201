@@ -57,6 +57,11 @@ export const NavbarPanel = () => {
                        <Link className="btn btn-primary mr-1" to={"/LoggedOut"}>Log Out</Link>
                    </NavItem>
                    }
+                   {isLoggedIn == true &&
+                   <NavItem>
+                       <Link className="btn btn-primary mr-1" to={"/LoggedOut"}>Log Out</Link>
+                   </NavItem>
+                   }
 
 >>>>>>> Stashed changes
                    <NavItem>
