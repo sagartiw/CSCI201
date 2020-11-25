@@ -8,6 +8,7 @@ import {Profile} from './pages/Profile';
 import {Login} from './pages/Login';
 import {EditProfile} from './pages/EditProfile';
 import {GlobalProvider} from "./context/GlobalState";
+import {LoggedOut} from './pages/LoggedOut';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
                       <Route path ='/Profile' component={Profile} />
                       <Route path ='/EditProfile' component={EditProfile} />
                       <Route path ='/DetailEvent/:name' component={DetailEvent}/>
+                      <Route path ='/LoggedOut' component={LoggedOut}/>
                   </Switch>
               </Router>
           </GlobalProvider>
