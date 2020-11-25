@@ -17,12 +17,9 @@ export const EditProfile = () => {
     const history = useHistory();
 
     const onSubmit = () => {
-        const newEvent = {
-            id: uuid,
-            name
-        }
-        editProfile(newEvent);
-        history.push("/");
+        let url: "http://localhost:4000/editUser";
+
+
     }
 
     const onChange = (e) =>{
@@ -43,7 +40,7 @@ export const EditProfile = () => {
                     <Input type="text" name="name" onChange={onChange} placeholder="Description"></Input>
                     <p>
                     </p>
-                    <button className="btn btn-primary">Submit</button>
+                    <button className="btn btn-primary" onClick={onSubmit}>Submit</button>
                 </div>
 
     )

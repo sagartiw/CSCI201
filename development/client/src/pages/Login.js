@@ -13,14 +13,11 @@ import {
 import { NavbarPanel } from "../components/Navbar";
 
 export const Login = () => {
-    const [name, setName] = useState('');
-    const{ login } = useContext(GlobalContext);
-    const history = useHistory();
 
     const [UserUsername, setUsername] = useState("");
     const [UserPassword, setPassword] = useState("");
-    const [attemptMessage, setAttemptMessage] = useState("");
-    const [loginSuccess, setLoginSuccess] = useState(false);
+    const [UserFirstName, setUserFirstName] = useState("");
+    const [UserLastName, setUserLastName] = useState("");
 
     async function onSubmit(){
         let url = "http://localhost:4000/login";
@@ -35,16 +32,12 @@ export const Login = () => {
         else {
             localStorage.setItem('username', null);
         }
-
-        const onChange = (e) =>{
-            setName(e.target.value);
-        }
     }
 
     async function onRegister() {
         let url = "http://localhost:4000/addUser";
 
-        const res = await axios.post(url, {params: {username: UserUsername, password: UserPassword}});
+        const res = await axios.post(url, {username: UserUsername, password: UserPassword, firstName: UserFirstName, lastName: UserLastName});
 
         if(res.status === 200){
             localStorage.setItem('username', UserUsername);
@@ -56,10 +49,6 @@ export const Login = () => {
         }
         else{
             localStorage.setItem('username', null);
-        }
-
-        const onChange = (e) =>{
-            setName(e.target.value);
         }
     }
 
@@ -82,6 +71,8 @@ export const Login = () => {
             <p>Register: </p>
             <Input type="text" name="name" onChange={e => setUsername(e.target.value)} placeholder="Username"></Input>
             <Input type="text" name="name" onChange={e => setPassword(e.target.value)} placeholder="Password"></Input>
+            <Input type="text" name="name" onChange={e => setUserFirstName(e.target.value)} placeholder="First Name"></Input>
+            <Input type="text" name="name" onChange={e => setUserLastName(e.target.value)} placeholder="Last Name"></Input>
             <p>
             </p>
             <button className="btn btn-primary" onClick={onRegister}>Register</button>
