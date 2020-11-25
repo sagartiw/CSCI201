@@ -27,10 +27,11 @@ export const Login = () => {
         if (res.status == 200)
         {
             localStorage.setItem('username', UserUsername);
-            window.location.reload(false);
+            window.location.replace("http://localhost:3000");
         }
         else {
             localStorage.setItem('username', null);
+            window.location.reload(false);
         }
     }
 
@@ -41,14 +42,16 @@ export const Login = () => {
 
         if(res.status === 200){
             localStorage.setItem('username', UserUsername);
-            window.location.reload(false);
+            window.location.replace("http://localhost:3000");
         }
         else if(res.status === 400){
             alert("Username already exists!");
             localStorage.setItem('username', null);
+            window.location.reload(false);
         }
         else{
             localStorage.setItem('username', null);
+            window.location.reload(false);
         }
     }
 
