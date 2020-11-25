@@ -24,25 +24,30 @@ export const Login = () => {
 
         let url = "http://localhost:4000/login";
 
-
-        const res = await axios.get(url,{params: {username: UserUsername, password: UserPassword}});
-
-
-        if (res.status == 200)
-        {
-            localStorage.setItem('username', UserUsername);
-            window.location.replace("http://localhost:3000");
+        try {
+            const res = await axios.get(url,{params: {username: UserUsername, password: UserPassword}});
+            if (res.status == 200)
+            {
+                localStorage.setItem('username', UserUsername);
+                window.location.replace("http://localhost:3000");
+            }
+            else if(res.status == 400){
+                localStorage.setItem('username', null);
+                console.log("WE MADE IT HERE");
+                window.location.reload(false);
+            }
+            else {
+                localStorage.setItem('username', null);
+                console.log("WE MADE IT HERE");
+                window.location.reload(false);
+            }
         }
-        else if(res.status == 400){
-            localStorage.setItem('username', null);
-            console.log("WE MADE IT HERE");
-            window.location.reload(false);
+        catch(error) {
+            alert("Incorrect username or password. Please try again");
         }
-        else {
-            localStorage.setItem('username', null);
-            console.log("WE MADE IT HERE");
-            window.location.reload(false);
-        }
+
+
+
     }
 
     async function onRegister() {
