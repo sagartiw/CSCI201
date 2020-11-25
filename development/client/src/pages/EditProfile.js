@@ -32,7 +32,6 @@ export const EditProfile = (props) => {
     },[])
 
     const onSubmit = () => {
-<<<<<<< HEAD
         let url = "http://localhost:4000/editUser";
         axios.post(url, {
             username: localStorage.getItem('username'),
@@ -50,11 +49,6 @@ export const EditProfile = (props) => {
             });
         console.log("FINISHED SUBMITTING")
         history.push("/");
-=======
-        let url: "http://localhost:4000/editUser";
-
-
->>>>>>> e661ea3b4ca2e43a7bb7d08248db87f3e76d88f6
     }
 
     const firstNameChange = (e) =>{
@@ -79,56 +73,47 @@ export const EditProfile = (props) => {
 
     return(
 
-                <div>
+        <div>
 
-                    <NavbarPanel/>
+            <NavbarPanel/>
 
-                    <h2>Edit Profile </h2>
-                    <p></p>
+            <h2>Edit Profile </h2>
+            <p></p>
 
-<<<<<<< HEAD
-                    {/*<Input type="text" name="name" onChange={onChangeName} placeholder="Name"></Input>*/}
-                    {/*<Input type="text" name="name" onChange={onChangeEmail} placeholder="Email"></Input>*/}
-                    {/*<Input type="text" name="name" onChange={onChangeDescription} placeholder="Description"></Input>*/}
-                    {/*<p>*/}
-                    {/*</p>*/}
-                    {/*<button className="btn btn-primary">Submit</button>*/}
-                    <Form onSubmit={onSubmit} style={{maxWidth: "30rem", padding:"1rem"}}>
-                            <>
-                                    <FormGroup>
-                                        <Label>First Name</Label>
-                                        <Input type="text" value={firstName} onChange={firstNameChange}></Input>
-                                    </FormGroup>
-                                    <FormGroup>
-                                        <Label>Last Name</Label>
-                                        <Input type="text" value={lastName} onChange={lastNameChange}></Input>
-                                    </FormGroup>
-                                    <FormGroup>
-                                        <Label>Password</Label>
-                                        <Input type="text" value={password} onChange={passwordChange}></Input>
-                                    </FormGroup>
-                                    <FormGroup>
-                                        <Label>Email</Label>
-                                        <Input type="text" name="Email" value={email} onChange={emailChange} placeholder={user.organization}></Input>
-                                    </FormGroup>
-                                    <FormGroup>
-                                        <Label>Description</Label>
-                                        <Input type="text" name="Description" value={description} onChange={descriptionChange} placeholder={user.description}></Input>
-                                    </FormGroup>
+            {/*<Input type="text" name="name" onChange={onChangeName} placeholder="Name"></Input>*/}
+            {/*<Input type="text" name="name" onChange={onChangeEmail} placeholder="Email"></Input>*/}
+            {/*<Input type="text" name="name" onChange={onChangeDescription} placeholder="Description"></Input>*/}
+            {/*<p>*/}
+            {/*</p>*/}
+            {/*<button className="btn btn-primary">Submit</button>*/}
+            <Form onSubmit={onSubmit} style={{maxWidth: "30rem", padding:"1rem"}}>
+                <>
+                    <FormGroup>
+                        <Label>First Name</Label>
+                        <Input type="text" value={firstName} onChange={firstNameChange}></Input>
+                    </FormGroup>
+                    <FormGroup>
+                        <Label>Last Name</Label>
+                        <Input type="text" value={lastName} onChange={lastNameChange}></Input>
+                    </FormGroup>
+                    <FormGroup>
+                        <Label>Password</Label>
+                        <Input type="text" value={password} onChange={passwordChange}></Input>
+                    </FormGroup>
+                    <FormGroup>
+                        <Label>Email</Label>
+                        <Input type="text" name="Email" value={email} onChange={emailChange} placeholder={user.organization}></Input>
+                    </FormGroup>
+                    <FormGroup>
+                        <Label>Description</Label>
+                        <Input type="text" name="Description" value={description} onChange={descriptionChange} placeholder={user.description}></Input>
+                    </FormGroup>
 
-                                <Button type="submit">Submit</Button>
-                                <Link to="/" className="btn btn-danger ml-2">Cancel</Link>
-                            </>
-                    </Form>
-=======
-                    <Input type="text" name="name" onChange={onChange} placeholder="Name"></Input>
-                    <Input type="text" name="name" onChange={onChange} placeholder="Email"></Input>
-                    <Input type="text" name="name" onChange={onChange} placeholder="Description"></Input>
-                    <p>
-                    </p>
-                    <button className="btn btn-primary" onClick={onSubmit}>Submit</button>
->>>>>>> e661ea3b4ca2e43a7bb7d08248db87f3e76d88f6
-                </div>
+                    <Button type="submit">Submit</Button>
+                    <Link to="/" className="btn btn-danger ml-2">Cancel</Link>
+                </>
+            </Form>
+        </div>
 
     )
 }
