@@ -30,9 +30,9 @@ export const EditEvent = (props) => {
         })
     }, [currentEventName, events])
 
-    const nameChange = (e) =>{
-        setName(e.target.value);
-    }
+    // const nameChange = (e) =>{
+    //     setName(e.target.value);
+    // }
 
     const organizationChange = (e) =>{
         setOrganization(e.target.value);
@@ -52,7 +52,7 @@ export const EditEvent = (props) => {
         axios.post(url, {
             organization: organization,
             time: new Date(time).toISOString(),
-            name: name,
+            name: selectedEvent.name,
             keywords: name,
             description: desc
         })
@@ -75,7 +75,7 @@ export const EditEvent = (props) => {
                             {selectedEvent.map((selectedEvent) => (
                                 <FormGroup>
                                     <Label>Name</Label>
-                                    <Input type="text" value={selectedEvent.name} onChange={nameChange}></Input>
+                                    <Input type="text" value={selectedEvent.name}></Input>
                                 </FormGroup>
                             ))}
                             {selectedEvent.map((selectedEvent) => (
