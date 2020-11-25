@@ -118,7 +118,7 @@ mongo.connect(function (err) {
                     organization: request.body.organization,
                     time: request.body.time,
                     name: request.body.name,
-                    keywords: [],
+                    keywords: [request.body.name],
                     description: request.body.description,
                     created: new Date(Date.now()).toISOString()
                 };
@@ -132,15 +132,15 @@ mongo.connect(function (err) {
                     response.status(200).json('Successfully added event!');
                 }
             })
-            await db.collection('Events').updateOne(
-                { name : request.body.name },
-                {
-                    $push : {
-                        keywords : request.body.keywords
-                    }
-                },
-                (err, result) => {
-                })
+            // await db.collection('Events').updateOne(
+            //     { name : request.body.name },
+            //     {
+            //         $push : {
+            //             keywords : request.body.keywords
+            //         }
+            //     },
+            //     (err, result) => {
+            //     })
         }
     });
 
