@@ -49,6 +49,14 @@ export const Profile = (props) => {
                         <NavbarPanel/>
                     <ListGroup className="mt-4">
                         <ListGroupItem className="d-flex">
+                            <Col xs="6"><strong>Username</strong></Col>
+                            <Col xs="6">{userData.username}</Col>
+                        </ListGroupItem>
+                        <ListGroupItem className="d-flex">
+                            <Col xs="6"><strong>Password</strong></Col>
+                            <Col xs="6">{userData.password}</Col>
+                        </ListGroupItem>
+                        <ListGroupItem className="d-flex">
                             <Col xs="6"><strong>Name</strong></Col>
                             <Col xs="6">{userData.firstName + " " + userData.lastName}</Col>
                         </ListGroupItem>

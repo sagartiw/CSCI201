@@ -106,7 +106,7 @@ export const EditProfile = (props) => {
                     </FormGroup>
                     <FormGroup>
                         <Label>Password</Label>
-                        <Input type="text" value={password} onChange={passwordChange}></Input>
+                        <Input type="text" value={password} onChange={passwordChange} placeholder={user.password}></Input>
                     </FormGroup>
                     <FormGroup>
                         <Label>Email</Label>
