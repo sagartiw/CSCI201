@@ -11,9 +11,16 @@ import {
 export const EventsPanel = () => {
     const [allEvents, setEvents] = useState('');
     const history = useHistory()
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     useEffect(() => {
+        const loggedin = localStorage.getItem('username')
         let url = "http://localhost:4000/allEvents";
+        if (loggedin != null) {
+            setIsLoggedIn(true);
+            console.log("user logged in");
+        }
+        else setIsLoggedIn(false);
         axios.get(url)
             .then(function (response) {
                 console.log(response.data);
@@ -44,9 +51,17 @@ export const EventsPanel = () => {
                         <ListGroupItem className="d-flex" key={allEvents._id}>
                             <strong>{allEvents.name}</strong>
                             <div className="ml-auto">
+
+
+
                                 <Link to={`/DetailEvent/${allEvents.name}`} color="success" className="btn btn-success mr-1">Details</Link>
+                                {isLoggedIn === true &&
+
                                 <Link to={`/EditEvent/${allEvents.name}`} color="warning" className="btn btn-warning mr-1">Edit</Link>
+                                }
+                                {isLoggedIn === true &&
                                 <Button onClick={() => onDelete(allEvents.name)} color="danger">Delete</Button>
+                                }
                             </div>
                         </ListGroupItem>
                     ))}
