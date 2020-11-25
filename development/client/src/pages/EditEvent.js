@@ -6,7 +6,7 @@ import {
     FormGroup,
     Label,
     Input,
-    Button, ListGroupItem, ListGroup
+    Button
 } from 'reactstrap';
 import {NavbarPanel} from "../components/Navbar";
 import axios from "axios";

@@ -6,9 +6,6 @@ import { useHistory } from 'react-router-dom';
 import { NavbarPanel } from "../components/Navbar";
 
 export const LoggedOut = () => {
-
-
-
     const [name, setName] = useState('');
     const{ login } = useContext(GlobalContext);
     const history = useHistory();
@@ -18,8 +15,6 @@ export const LoggedOut = () => {
     const [UserPassword, setPassword] = useState("");
     const [attemptMessage, setAttemptMessage] = useState("");
     const [loginSuccess, setLoginSuccess] = useState(false);
-
-
 
     return(
         <div>
