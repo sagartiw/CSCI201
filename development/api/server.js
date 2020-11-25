@@ -145,7 +145,7 @@ mongo.connect(function (err) {
                 if (result.length > 0) {
                     exists = true;
                 }
-                else if (result.length == 0) {
+                else if (result.length === 0) {
                     response.status(400).json("Cannot edit an event that does not exist!")
                 }
             })

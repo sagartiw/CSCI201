@@ -25,7 +25,7 @@ export const AddEvent = () => {
         let url = "http://localhost:4000/addEvent";
         axios.post(url, {
             organization: organization,
-            time: new Date(time),
+            time: new Date(time).toISOString(),
             name: name,
             keywords: name,
             description: desc

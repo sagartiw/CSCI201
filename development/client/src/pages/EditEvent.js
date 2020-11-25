@@ -51,7 +51,7 @@ export const EditEvent = (props) => {
         let url = "http://localhost:4000/editEvent";
         axios.post(url, {
             organization: organization,
-            time: new Date(time),
+            time: new Date(time).toISOString(),
             name: name,
             keywords: name,
             description: desc
@@ -75,7 +75,7 @@ export const EditEvent = (props) => {
                             {selectedEvent.map((selectedEvent) => (
                                 <FormGroup>
                                     <Label>Name</Label>
-                                    <Input type="text" value={name} onChange={nameChange} placeholder={selectedEvent.name}></Input>
+                                    <Input type="text" value={selectedEvent.name} onChange={nameChange}></Input>
                                 </FormGroup>
                             ))}
                             {selectedEvent.map((selectedEvent) => (
