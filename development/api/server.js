@@ -118,7 +118,7 @@ mongo.connect(function (err) {
                     organization: request.body.organization,
                     time: request.body.time,
                     name: request.body.name,
-                    keywords: request.body.keywords,
+                    keywords: [],
                     description: request.body.description,
                     created: new Date(Date.now()).toISOString()
                 };
@@ -132,6 +132,15 @@ mongo.connect(function (err) {
                     response.status(200).json('Successfully added event!');
                 }
             })
+            await db.collection('Events').updateOne(
+                { name : request.body.name },
+                {
+                    $push : {
+                        keywords : request.body.keywords
+                    }
+                },
+                (err, result) => {
+                })
         }
     });
 
@@ -223,6 +232,42 @@ mongo.connect(function (err) {
             .catch((error) => {
                 response.status(400).send(error.message);
             })
+    });
+
+    // add keyword to event
+    app.post('/addKeyword', async (request, response) => {
+        let exists = false;
+        // Check if the user exists
+        await db.collection('Events').find({
+            name : request.query.name
+        }).toArray()
+            .then((result) => {
+                if (result.length > 0) {
+                    exists = true;
+                }
+                else {
+                    response.status(400).json("Event does not exist!")
+                }
+            })
+
+        if (exists) { // Only if Event exists. add keyword
+            console.log('Adding Keyword to Event');
+
+            await db.collection('Events').updateOne(
+                { name : request.query.name },
+                {
+                    $push : {
+                        keywords : request.query.keyword
+                    }
+                },
+                (err, result) => {
+                    if (err) {
+                        response.status(400).json('Failed to add Keyword to Event');
+                    } else {
+                        response.status(200).json('Successfully added Keyword to Event!');
+                    }
+                })
+        }
     });
 
     // ---------------------------------------------------------------------

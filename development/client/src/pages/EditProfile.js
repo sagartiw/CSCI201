@@ -63,7 +63,8 @@ export const EditProfile = (props) => {
             });
         history.go(0);
         console.log("FINISHED SUBMITTING")
-        history.push("/");
+        history.push("/Profile");
+        window.location.replace("http://localhost:3000/Profile");
     }
 
     const firstNameChange = (e) =>{
