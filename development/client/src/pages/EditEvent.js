@@ -71,6 +71,7 @@ export const EditEvent = (props) => {
             });
         history.go(0);
         history.push("/");
+        window.location.replace("http://localhost:3000");
     }
 
     return(
