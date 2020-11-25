@@ -40,6 +40,12 @@ export const DetailEvent = (props) => {
                         ))}
                         {selectedEvent.map((selectedEvent) => (
                             <ListGroupItem className="d-flex">
+                                <Col xs="6"><strong>Time</strong></Col>
+                                <Col xs="6">{selectedEvent.time}</Col>
+                            </ListGroupItem>
+                        ))}
+                        {selectedEvent.map((selectedEvent) => (
+                            <ListGroupItem className="d-flex">
                                 <Col xs="6"><strong>Description</strong></Col>
                                 <Col xs="6">{selectedEvent.description}</Col>
                             </ListGroupItem>

@@ -43,7 +43,7 @@ export const Login = () => {
             }
         }
         catch(error) {
-            alert("Incorrect username or password. Please try again");
+            alert("Incorrect username or password. Please try again!");
         }
 
 
@@ -52,24 +52,28 @@ export const Login = () => {
 
     async function onRegister() {
         let url = "http://localhost:4000/addUser";
+        try{
+            const res = await axios.post(url, {username: UserUsername, password: UserPassword, firstName: UserFirstName, lastName: UserLastName});
+            if(res.status === 200){
+                localStorage.setItem('username', UserUsername);
+                window.location.replace("http://localhost:3000");
+            }
+            else if(res.status === 400){
+                alert("Username already exists!");
+                localStorage.setItem('username', null);
+                console.log("WE MADE IT HERE");
+                window.location.reload(false);
+            }
+            else{
+                localStorage.setItem('username', null);
+                console.log("WE MADE IT HERE");
+                window.location.reload(false);
+            }
+        }
+        catch(error){
+            alert("Username already exists! Please try again.");
+        }
 
-        const res = await axios.post(url, {username: UserUsername, password: UserPassword, firstName: UserFirstName, lastName: UserLastName});
-
-        if(res.status === 200){
-            localStorage.setItem('username', UserUsername);
-            window.location.replace("http://localhost:3000");
-        }
-        else if(res.status === 400){
-            alert("Username already exists!");
-            localStorage.setItem('username', null);
-            console.log("WE MADE IT HERE");
-            window.location.reload(false);
-        }
-        else{
-            localStorage.setItem('username', null);
-            console.log("WE MADE IT HERE");
-            window.location.reload(false);
-        }
     }
 
 
