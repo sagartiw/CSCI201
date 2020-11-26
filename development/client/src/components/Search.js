@@ -42,9 +42,9 @@ export const SearchPanel = () =>{
                             <ListGroupItem className="d-flex" key={searchResults._id}>
                                 <strong>{searchResults.name}</strong>
                                 <div className="ml-auto">
-                                    <Link to={`/DetailEvent/${searchResults._id}`} color="success" className="btn btn-success mr-1">Details</Link>
-                                    <Link to={`/EditEvent/${searchResults._id}`} color="warning" className="btn btn-warning mr-1">Edit</Link>
-                                    <Button onClick={() => removeEvent(searchResults._id)} color="danger">Delete</Button>
+                                    <Link to={`/DetailEvent/${searchResults.name}`} color="success" className="btn btn-success mr-1">Details</Link>
+                                    <Link to={`/EditEvent/${searchResults.name}`} color="warning" className="btn btn-warning mr-1">Edit</Link>
+                                    <Button onClick={() => removeEvent(searchResults.name)} color="danger">Delete</Button>
                                 </div>
                             </ListGroupItem>
                         ))}
