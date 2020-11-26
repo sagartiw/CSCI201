@@ -40,6 +40,7 @@
     ]
   },
   "devDependencies": {
+    "react-alert": "^7.0.2",
     "uuid": "^8.3.1"
   }
 }

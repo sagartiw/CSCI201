@@ -1,6 +1,6 @@
 import React from 'react';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
-import {Home} from './pages/Home';
+import Home from './pages/Home';
 import {AddEvent} from './pages/AddEvent';
 import {EditEvent} from './pages/EditEvent';
 import {DetailEvent} from "./pages/DetailEvent";

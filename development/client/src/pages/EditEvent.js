@@ -53,13 +53,13 @@ export const EditEvent = (props) => {
 
     //Somehow adds a new event instead of properly editing.
     const onSubmit = () => {
-        if(organization.length == 0) {
+        if(organization.length === 0) {
             organization = selectedEvent.organization;
         }
-        if(time.length == 0) {
+        if(time.length === 0) {
             time = selectedEvent.time;
         }
-        if(desc.length == 0) {
+        if(desc.length === 0) {
             desc = selectedEvent.description;
         }
         let url = "http://localhost:4000/editEvent"
