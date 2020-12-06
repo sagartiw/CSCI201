@@ -24,9 +24,10 @@ class Home extends Component {
         axios.get(url)
             .then((response) => {
                 this.setState({ 'notifications' : response.data})
-                for(let i = 0; i < this.state.notifications.length; i++) {
+                /*for(let i = 0; i < this.state.notifications.length; i++) {
                     window.alert("You have an event: " + this.state.notifications[i]);
-                }
+                }*/
+                window.alert("You have an event: " + this.state.notifications[0] + "\nThere may be more alerts, but they have been suppressed in this version of our application.");
             })
         console.log("HERE: " + this.state.notifications);
     }
