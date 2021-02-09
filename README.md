@@ -26,4 +26,4 @@ When adding or editing an event, users must fill in a few mandatory fields (such
 # Search
 Here is an example of a search request. As you can see, "rpl" was inputted as a search, yielding the following list of events. While all events do not have the term "rpl" in the name, the acronym was added as a keyword due to the fact that the host organization is the Rocket Propulsion Laboratory.
 
-![Search](README/Search.png)
+![Search](README/User_Search.png)
