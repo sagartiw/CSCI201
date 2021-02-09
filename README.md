@@ -2,5 +2,5 @@
 
 **This web application was submitted for a CSCI201 Final Project in Fall 2020.**
 
-![Homepage](README/Event.png)
+![Homepage (Guest Permissions)](README/Guest_Home.png)
  
