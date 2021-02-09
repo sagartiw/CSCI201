@@ -17,8 +17,13 @@ Here is the home page for a registered user. As you can see, users have the addi
 ![Homepage (User Permissions)](README/User_Home.png)
 
 ****
-# Edit Event (User Permissions)
-When adding or editing an event, users must fill in a few mandatory fields (such as the name). However, other fields, such as a description, can be left blank.
+# Edit Event
+When adding or editing an event, users must fill in a few mandatory fields (such as the name). However, other fields, such as a description, can be left blank. Users can also add keywords, which attach to the event object and become included as a search term.
 
-![Edit Event (User Permissions)](README/Edit_Event.png)
+![Edit Event](README/Edit_Event.png)
  
+****
+# Search
+Here is an example of a search request. As you can see, "rpl" was inputted as a search, yielding the following list of events. While all events do not have the term "rpl" in the name, the acronym was added as a keyword due to the fact that the host organization is the Rocket Propulsion Laboratory.
+
+![Search](README/Search.png)
